@@ -14,3 +14,6 @@ curl -i -H "Content-Type: application/json" -X GET -d '{}' http://localhost:5000
 
 echo "curl -i -H "Content-Type: application/json" -X DELETE -d '{}' http://localhost:5000/api/v1/acts/1234"
 curl -i -H "Content-Type: application/json" -X DELETE -d '{}' http://localhost:5000/api/v1/acts/1234
+
+echo "curl -i -H "Content-Type: application/json" -X POST -d '{"username":"shashank","password":"8b832b62abf2bd5180f6a225e4b99cac1392ea10"}' http://localhost:5000/api/v1/users"
+curl -i -H "Content-Type: application/json" -X POST -d '{"username":"shashank","password":"8b832b62abf2bd5180f6a225e4b99cac1392ea10"}' http://localhost:5000/api/v1/users

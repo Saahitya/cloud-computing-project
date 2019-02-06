@@ -9,6 +9,8 @@ no_of_acts_categories_dict = {
     "category2" : 150,
 }
 
+user_list = []
+
 acts_list_categories_dict = {
     "category1" : [
                     {
@@ -112,5 +114,29 @@ def delete_act(task_id):
                 break
         del(act_list[i])
         return jsonify({}),200
+#1
+@app.route('/api/v1/users',methods = ['POST'])
+def add_user():
+    if not request.is_json or len(request.json) != 2:
+        abort(400)
+    users = []
+    for i in user_list:
+        users.append(i["username"])
+    if(request.json["username"] not in users):
+        hex = ['a','b','c','d','e','f','0','1','2','3','4','5','6','7','8','9']
+        passwd = request.json["password"]
+        if(len(passwd) == 40):
+            for i in passwd:
+                if(i not in hex):
+                    abort(405)
+            d = {}
+            d["username"] = request.json["username"]
+            d["password"] = request.json["password"]
+            user_list.append(d)
+            return jsonify({}),201
+        else:
+            abort(405)
+    else:
+        abort(405)
 if __name__ == '__main__':
     app.run(debug=True)
