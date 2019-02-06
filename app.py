@@ -95,7 +95,30 @@ def number_of_acts_for_category():
 # @app.route('/api/act/list-in-range')
 
 # 7
+"""
 @app.route('/api/act/upvote', methods=['POST'])
-def upvote_act
+def upvote_ac
+"""
+#10
+@app.route('/api/v1/acts/<int:task_id>',methods = ['DELETE'])
+def delete_act(task_id):
+    categories = list(acts_list_categories_dict.keys());
+    flag = 0
+    for i in categories:
+        acts = acts_list_categories_dict[i]
+        for j in acts:
+            if(j["actId"] == task_id):
+                category = i
+                flag = 1
+                break
+    if(flag == 0):
+        return jsonify({}),405
+    else:
+        act_list = acts_list_categories_dict[category]
+        for i in range(len(act_list)):
+            if(act_list[i]["actId"] == task_id):
+                break
+        del(act_list[i])
+        return jsonify({},200
 if __name__ == '__main__':
     app.run(debug=True)
