@@ -11,3 +11,6 @@ curl -i -H "Content-Type: application/json" -X DELETE -d '["category2"]' http://
 
 echo "curl -i -H "Content-Type: application/json" -X GET -d '{}' http://localhost:5000/api/category/list"
 curl -i -H "Content-Type: application/json" -X GET -d '{}' http://localhost:5000/api/category/list
+
+echo "curl -i -H "Content-Type: application/json" -X DELETE -d '{}' http://localhost:5000/api/v1/acts/1234"
+curl -i -H "Content-Type: application/json" -X DELETE -d '{}' http://localhost:5000/api/v1/acts/1234
