@@ -138,5 +138,19 @@ def add_user():
             abort(405)
     else:
         abort(405)
+#2
+@app.route('/api/v1/users/<string:username>',methods = ['DELETE'])
+def rem_user(username):
+    if not request.is_json or len(request.json) != 0:
+        abort(400)
+    users = []
+    for i in user_list:
+        users.append(i["username"])
+    if(username in users):
+        index = users.index(username)
+        del(user_list[index])
+        return jsonify({}),200
+    else:
+        abort(405)
 if __name__ == '__main__':
     app.run(debug=True)
