@@ -51,7 +51,7 @@ def add_user():
         else:
             abort(405)
     else:
-	   abort(405)
+        abort(405)
 
 # 2_final [Remove users]
 @app.route('/api/v1/users/<string:username>',methods = ['DELETE'])
@@ -67,8 +67,6 @@ def rem_user(username):
         return jsonify({}),200
     else:
         abort(405)
-if __name__ == '__main__':
-    app.run(debug=True)
 
 # 3_final [List all categories]
 @app.route('/api/v1/categories', methods=['GET'])
@@ -81,12 +79,12 @@ def list_categories():
         return jsonify({}), 204
 
 # 4_final  [Add a category]
-@app.route('/api/category/add', methods=['POST'])
+@app.route('/api/v1/categories', methods=['POST'])
 def add_category():
     if not request.is_json or len(request.json) != 1:
         abort(400)
     elif request.json[0] not in categories:
- 	category = request.json[0]
+        category = request.json[0]
         no_of_acts_categories_dict[category] = 0
         acts_list_categories_dict[category] = []
         categories.add(category)
@@ -110,32 +108,32 @@ def remove_category(categoryName):
 # 6_final  [List acts for a given category]
 @app.route('/api/v1/categories/<string:categoryName>/acts', methods=['GET'])
 def list_acts_for_category(categoryName):
-    if not request.is_json or len(request) != 0:
+    if not request.is_json or len(request.json) != 0:
         abort(400)
     elif categoryName in acts_list_categories_dict:
         acts_list = acts_list_categories_dict[categoryName]
         len_acts_list = len(acts_list)
         if(len_acts_list == 0):
             return jsonify([]), 204
-        elif(len_acts_list > 100) :
+        elif(len_acts_list > 500) :
             abort(413)
         else:
-            return jsonify(len_acts_list), 200
+            return jsonify(acts_list), 200
     else:
-	   abort(405)
+        abort(405)
 
 
 # 7_final [Number of acts in a category]
 @app.route('/api/v1/categories/<string:categoryName>/acts/size', methods=['GET'])
 def number_of_acts_for_category(categoryName):
-    if not request.is_json or len(request) != 0:
+    if not request.is_json or len(request.json) != 0:
         abort(400)
     elif categoryName not in no_of_acts_categories_dict.keys():
         return jsonify([]), 204
     elif categoryName in no_of_acts_categories_dict.keys():
         return jsonify([no_of_acts_categories_dict[categoryName]])
     else:
-	   abort(405)
+        abort(405)
 
 # 8_final [Return acts for a given category in a given range]
 @app.route('/api/v1/categories/<string:categoryName>/acts?start=<int:startRange>&end=<int:endRange>', methods=['GET'])
@@ -144,11 +142,11 @@ def acts_in_range(categoryName, startRange, endRange):
         abort(400)
     elif categoryName not in no_of_acts_categories_dict.keys():
         return jsonify([]), 204
-    else: 
+    else:
         for i in acts_list_categories_dict[categoryName]:
             if((k >= startRange) and (k <= endRange)):
                 range_list.append(i)
-            k++
+            k = k + 1
         if(len(range_list) > 100):
             abort(413)
         else:
@@ -164,8 +162,8 @@ def upvote_an_act():
 	        abort(400)
 	for i in acts_list_categories_dict.values():
 		for j in i:
-			if j[actId]==request.json[0]:
-				j[upvotes] = j[upvotes]+1
+			if j["actId"]==request.json[0]:
+				j["upvotes"] = j["upvotes"]+1
 				return jsonify({}), 200
 	abort(405)
 
@@ -174,56 +172,56 @@ def upvote_an_act():
 def delete_act(task_id):
     if not request.is_json or len(request.json) != 0:
             abort(400)
-    for i in acts_list_categories_dict.values():
-        for j in i:
-            if j[actId]==task_id:
-                del(j)
-                return jsonify({}), 200
+    # for i in acts_list_categories_dict.values():
+    #     for j in range(len(i)):
+    #         if j["actId"]==task_id:
+    #             del(j)
+    #             return jsonify({}), 200
+    category_list = list(acts_list_categories_dict.keys())
+    for i in (category_list):
+        act_list = acts_list_categories_dict[i]
+        flag = 0
+        for j in range(len(act_list)):
+            if(act_list[j]["actId"] == task_id):
+                del(act_list[j])
+                return jsonify({}),200
     abort(405)
 
 
 # 11_final []
-@app.route('/api/v1/acts', methods=['POST'])
-def upload_an_act():
-    if not request.is_json or len(request.json) != 6:
-            abort(400)
-    #The ​actID​ in the request body must be globally unique(1,7)
-    for i in acts_list_categories_dict.values():
-        for j in i:
-            if j[actId]==request.json[0]:
-                abort(400)
-    #The username must exist(3)
-    int flag = 0
-    for i in user_list:
-        if i["username"] == request.json[1]:
-            flag = 1
-            break
-    if flag==0:
-        abort(400)
-    #No upvotes field should be sent(5)
-    if "upvotes" in request.json.keys():
-        abort(400)
-    #The category name must exist(6)
-    if request.json[4] not in categories:
-        abort(400)
-    #Uploading the act
-    no_of_acts_categories_dict[json.request[4]] = no_of_acts_categories_dict[json.request[4]]+1
-    d = dict()
-    d["actId"] = json.request[0]
-    d["timestamp"] = json.request[2]
-    d["caption"] = json.request[3]
-    d["upvotes"] = 0
-    d["imgUrl"] = json.request[5]
-    acts_list_categories_dict[json.request[4]].append(d)
-    return jsonify({}), 200
+# @app.route('/api/v1/acts', methods=['POST'])
+# def upload_an_act():
+#     if not request.is_json or len(request.json) != 6:
+#             abort(400)
+#     #The ​actID​ in the request body must be globally unique(1,7)
+#     for i in acts_list_categories_dict.values():
+#         for j in i:
+#             if j[actId]==request.json[0]:
+#                 abort(400)
+#     #The username must exist(3)
+#     int flag = 0
+#     for i in user_list:
+#         if i["username"] == request.json[1]:
+#             flag = 1
+#             break
+#     if flag==0:
+#         abort(400)
+#     #No upvotes field should be sent(5)
+#     if "upvotes" in request.json.keys():
+#         abort(400)
+#     #The category name must exist(6)
+#     if request.json[4] not in categories:
+#         abort(400)
+#     #Uploading the act
+#     no_of_acts_categories_dict[json.request[4]] = no_of_acts_categories_dict[json.request[4]]+1
+#     d = dict()
+#     d["actId"] = json.request[0]
+#     d["timestamp"] = json.request[2]
+#     d["caption"] = json.request[3]
+#     d["upvotes"] = 0
+#     d["imgUrl"] = json.request[5]
+#     acts_list_categories_dict[json.request[4]].append(d)
+#     return jsonify({}), 200
 
-
-
-
-
-
-
-
-
-
-
+if __name__ == '__main__':
+    app.run(debug=True)
