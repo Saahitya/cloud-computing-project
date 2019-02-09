@@ -1,32 +1,35 @@
 from flask import Flask, jsonify, request, abort
+import pickle;
+
 
 app = Flask(__name__)
 
-categories = set(["category1", "category2"]);
+# categories = set(["category1", "category2"]);
 
-no_of_acts_categories_dict = {
-    "category1" : 200,
-    "category2" : 150,
-}
+# no_of_acts_categories_dict = {
+#     "category1" : 200,
+#     "category2" : 150,
+# }
 
-user_list = [] #List of dictionaries with each dictionary corresponding to one user with 2 keys : username and password
+# user_list = [] #List of dictionaries with each dictionary corresponding to one user with 2 keys : username and password
 
-range_list = []
+# range_list = []
+
 k=0
 
-acts_list_categories_dict = {
-    "category1" : [
-                    {
-                        "actId": 1234,
-                        "timestamp": "DD-MM-YYYY:SS-MM-HH",
-                        "caption": "captiontext",
-                        "upvotes": 25,
-                        "imgUrl": "xyz.abc/img.png"
+# acts_list_categories_dict = {
+#     "category1" : [
+#                     {
+#                         "actId": 1234,
+#                         "timestamp": "DD-MM-YYYY:SS-MM-HH",
+#                         "caption": "captiontext",
+#                         "upvotes": 25,
+#                         "imgUrl": "xyz.abc/img.png"
 
-                    },
-                ],
-    "category2" : [],
-}
+#                     },
+#                 ],
+#     "category2" : [],
+# }
 
 # 1_final [Add users]
 @app.route('/api/v1/users',methods = ['POST'])
@@ -187,6 +190,22 @@ def delete_act(task_id):
                 return jsonify({}),200
     abort(405)
 
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    pickle.dump(categories, open("categories.p", "wb"))
+    pickle.dump(no_of_acts_categories_dict, open("no_of_acts_categories_dict.p", "wb"))
+    pickle.dump(user_list, open("user_list.p", "wb"))
+    pickle.dump(range_list, open("range_list.p", "wb"))
+    pickle.dump(acts_list_categories_dict, open("acts_list_categories_dict.p", "wb"))
+    func()
+
+@app.route('/shutdown', methods=['POST'])
+def shutdown():
+    shutdown_server()
+    return 'Server shutting down...'
+
 
 # 11_final []
 # @app.route('/api/v1/acts', methods=['POST'])
@@ -224,4 +243,9 @@ def delete_act(task_id):
 #     return jsonify({}), 200
 
 if __name__ == '__main__':
+    no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
+    categories = pickle.load(open("categories.p", "rb"))
+    user_list = pickle.load(open("user_list.p", "rb"))
+    range_list = pickle.load( open("range_list.p", "rb"))
+    acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
     app.run(debug=True)
