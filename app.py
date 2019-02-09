@@ -184,6 +184,7 @@ def delete_act(task_id):
         for j in range(len(act_list)):
             if(act_list[j]["actId"] == task_id):
                 del(act_list[j])
+                no_of_acts_categories_dict[i] = no_of_acts_categories_dict[i] - 1
                 return jsonify({}),200
     abort(405)
 
