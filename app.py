@@ -27,6 +27,12 @@ acts_list_categories_dict = {
                 ],
     "category2" : [],
 }
+@app.after_request
+def after_request(response):
+  response.headers.add('Access-Control-Allow-Origin', '*')
+  response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  return response
 
 # 1_final [Add users]
 @app.route('/api/v1/users',methods = ['POST'])
@@ -71,12 +77,12 @@ def rem_user(username):
 # 3_final [List all categories]
 @app.route('/api/v1/categories', methods=['GET'])
 def list_categories():
-    if not request.is_json:
-        abort(405)
-    elif(len(categories) > 0):
-        return jsonify(no_of_acts_categories_dict), 200
+    # if not request.is_json:
+    #     abort(405)
+    if(len(categories) > 0):
+        return jsonify(no_of_acts_categories_dict),200
     else:
-        return jsonify({}), 204
+        return jsonify({}),204
 
 # 4_final  [Add a category]
 @app.route('/api/v1/categories', methods=['POST'])

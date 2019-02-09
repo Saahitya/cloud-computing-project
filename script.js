@@ -10,7 +10,7 @@ app.appendChild(logo);
 app.appendChild(container);
 
 var request = new XMLHttpRequest();
-request.open('GET', 'http://127.0.0.1:5000/api/category/list', true);
+request.open('GET', 'http://127.0.0.1:5000/api/v1/categories', true);
 request.onload = function () {
 
   // Begin accessing JSON data here
