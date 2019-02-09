@@ -5,8 +5,8 @@ app = Flask(__name__)
 categories = set(["category1", "category2"]);
 
 no_of_acts_categories_dict = {
-    "category1" : 200,
-    "category2" : 150,
+    "category1" : 2,
+    "category2" : 0,
 }
 
 user_list = [] #List of dictionaries with each dictionary corresponding to one user with 2 keys : username and password
@@ -236,5 +236,51 @@ def delete_act(task_id):
 #     base64.decodestring("foo")
 # except binascii.Error:
 #     print "no correct base64"
+
+@app.route('/api/v1/acts', methods=['POST'])
+def upload_an_act():
+    if not request.is_json or len(request.json) != 6:
+        abort(400)
+    #The ​actID​ in the request body must be globally unique(1,7)
+    for i in acts_list_categories_dict.values():
+        for j in i:
+            if j["actId"]==request.json["actId"]:
+                abort(405)
+
+    #Validatin date and time (2)
+    #if(request.json["timestamp"] != datetime.strptime(request.json["timestamp"], "%\d-%m-%y %S:%M:%H")):
+    #    abort(400)
+    flag = 0
+    for i in user_list:
+        if i["username"] == request.json["username"]:
+            flag = 1
+            break
+    if flag==0:
+        abort(405)
+
+
+    #No upvotes field should be sent(5)
+    if "upvotes" in request.json.keys():
+        abort(400)
+
+    #The category name must exist(6)
+    if request.json["categoryName"] not in categories:
+        abort(405)
+
+    # Validating base_64 password
+    # if( not re.match(r"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$", json.request["imgB64"])):
+    #      abort(400)
+
+    #Uploading the act
+    no_of_acts_categories_dict[request.json["categoryName"]] = no_of_acts_categories_dict[request.json["categoryName"]]+1
+    d = dict()
+    d["actId"] = request.json["actId"]
+    d["timestamp"] = request.json["timestamp"]
+    d["caption"] = request.json["caption"]
+    d["upvotes"] = 0
+    d["imgUrl"] = request.json["imgB64"]
+    acts_list_categories_dict[request.json["categoryName"]].append(d)
+    return jsonify({}), 201
+
 if __name__ == '__main__':
     app.run(debug=True)
