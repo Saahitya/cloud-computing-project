@@ -77,8 +77,8 @@ def rem_user(username):
 # 3_final [List all categories]
 @app.route('/api/v1/categories', methods=['GET'])
 def list_categories():
-    # if not request.is_json:
-    #     abort(405)
+    if not request.is_json:
+         abort(405)
     if(len(categories) > 0):
         return jsonify(no_of_acts_categories_dict),200
     else:

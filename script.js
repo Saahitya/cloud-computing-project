@@ -11,6 +11,9 @@ app.appendChild(container);
 
 var request = new XMLHttpRequest();
 request.open('GET', 'http://127.0.0.1:5000/api/v1/categories', true);
+request.setRequestHeader("Content-type", "application/json");
+var data = JSON.stringify({});
+request.send(data);
 request.onload = function () {
 
   // Begin accessing JSON data here
@@ -20,21 +23,21 @@ request.onload = function () {
     for (var key in data) {
       const card = document.createElement('div');
       card.setAttribute('class', 'card');
-      uri_loc_on_click = 'category.html?name='+encodeURIComponent(key);
-      console.log(uri_loc_on_click);
-      console.log("location.href="+uri_loc_on_click);
-      card.setAttribute( "location.href",uri_loc_on_click);
+      //uri_loc_on_click = 'category.html?name='+encodeURIComponent(key);
+      //console.log(uri_loc_on_click);
+      //console.log("location.href="+uri_loc_on_click);
+      //card.setAttribute( "location.href",uri_loc_on_click);
       const h1 = document.createElement('h1');
       h1.textContent = key;
 
-      const p = document.createElement('p');
+      const h3 = document.createElement('p');
       //movie.description = data[key];
-      p.textContent = `${data[key]}...`;
+      h3.textContent = `${data[key]}`;
 
       container.appendChild(card);
       card.appendChild(h1);
-      card.appendChild(p);
-      card.append(logo.cloneNode(true));
+      card.appendChild(h3);
+      //card.append(logo.cloneNode(true));
     }
   } else {
     const errorMessage = document.createElement('marquee');

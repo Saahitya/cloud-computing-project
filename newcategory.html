@@ -1,0 +1,42 @@
+<html>
+<head>
+  <title>Upload</title>
+</head>
+<body>
+  <div>
+    <label>Category Name</label>
+    <input type="text" placeholder="Category" id = "input"><br>
+    <button type="button" onclick="add_cat()">Create</button>
+  </div>
+  <script>
+  function add_cat()
+  {
+      var category_name = document.getElementById("input").value;
+      req = new XMLHttpRequest();
+      var url = "http://127.0.0.1:5000/api/v1/categories";
+      req.open("POST", url, true);
+      req.setRequestHeader("Content-type", "application/json");
+      var data = JSON.stringify([category_name]);
+      req.send(data);
+      req.onload = function ()
+      {
+        if (req.status == 201)
+        {
+          alert("category added");
+          location.replace("index.html");
+        }
+        else if(req.status == 405)
+        {
+          alert("category already exists");
+          location.replace("newcategory.html");
+        }
+        else
+        {
+            alert("Error In Sending Try Again");
+            location.replace("newcategory.html");
+        }
+      }
+  }
+  </script>
+</body>
+</html>
