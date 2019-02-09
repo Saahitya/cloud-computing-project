@@ -223,6 +223,12 @@ def delete_act(task_id):
 #     d["imgUrl"] = json.request[5]
 #     acts_list_categories_dict[json.request[4]].append(d)
 #     return jsonify({}), 200
-
+# import base64
+# import binascii
+#
+# try:
+#     base64.decodestring("foo")
+# except binascii.Error:
+#     print "no correct base64"
 if __name__ == '__main__':
     app.run(debug=True)
