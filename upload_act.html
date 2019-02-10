@@ -1,0 +1,62 @@
+<html>
+<head>
+  <title> Upload Act</title>
+</head>
+<body>
+  <label> Actid </label> <br> <br>
+  <input type="text" placeholder="ID" id = "actid"><br><br>
+  <lable> Username </label><br><br>
+  <input type="text" placeholder="name" id = "name"><br><br>
+  <label>TimeStamp</label><br><br>
+  <input type="text" placeholder="DD-MM-YYYY:SS-MM-HH" id = "time"><br><br>
+  <label> Caption </label><br><br>
+  <input type="text" placeholder="Caption" id = "caption"><br><br>
+  <label> Image Base 64</label><br><br>
+  <input type="text" placeholder="Base64" id = "image"><br><br>
+  <label> Category </label><br><br>
+  <input type="text" placeholder="category" id = "cat"></br></br>
+  <button type="button" onclick = "fun()">Submit</button>
+  <script>
+  function fun()
+  {
+    var id = document.getElementById("actid").value;
+    var name = document.getElementById("name").value;
+    var time = document.getElementById("time").value;
+    var caption = document.getElementById("caption").value;
+    var image = document.getElementById("image").value;
+    var cat = document.getElementById("cat").value;
+    var d = {};
+    d["actId"] = Number(id);
+    d["timestamp"] = time;
+    d["caption"] = caption;
+    d["img"] = image;
+    d["username"] = name;
+    d["categoryName"] = cat;
+    req = new XMLHttpRequest();
+    var url = "http://127.0.0.1:5000/api/v1/acts";
+    req.open("POST", url, true);
+    req.setRequestHeader("Content-type", "application/json");
+    var data = JSON.stringify(d);
+    req.send(data);
+    req.onload = function ()
+    {
+      if (req.status == 201)
+      {
+        alert("Act Added");
+        location.replace("index.html");
+      }
+      else if(req.status == 405)
+      {
+        alert("Error with place values");
+        location.replace("upload_act.html");
+      }
+      else
+      {
+          alert("Error In Sending Try Again");
+          location.replace("upload_act.html");
+      }
+    }
+  }
+  </script>
+</body>
+</html>

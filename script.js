@@ -29,7 +29,10 @@ request.onload = function () {
       //card.setAttribute( "location.href",uri_loc_on_click);
       const h1 = document.createElement('h1');
       h1.textContent = key;
-
+      const a = document.createElement('a');
+      var url = "act.html?"+key;
+      a.setAttribute("href",url);
+      a.textContent = "Link";
       const h3 = document.createElement('p');
       //movie.description = data[key];
       h3.textContent = `${data[key]}`;
@@ -37,6 +40,7 @@ request.onload = function () {
       container.appendChild(card);
       card.appendChild(h1);
       card.appendChild(h3);
+      card.appendChild(a);
       //card.append(logo.cloneNode(true));
     }
   } else {

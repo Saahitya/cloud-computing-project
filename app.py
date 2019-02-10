@@ -5,7 +5,7 @@ app = Flask(__name__)
 categories = set(["category1", "category2"]);
 
 no_of_acts_categories_dict = {
-    "category1" : 1,
+    "category1" : 0,
     "category2" : 0,
 }
 
@@ -15,16 +15,7 @@ range_list = []
 k=0
 
 acts_list_categories_dict = {
-    "category1" : [
-                    {
-                        "actId": 1234,
-                        "timestamp": "DD-MM-YYYY:SS-MM-HH",
-                        "caption": "captiontext",
-                        "upvotes": 25,
-                        "imgUrl": "xyz.abc/img.png"
-
-                    },
-                ],
+    "category1" : [],
     "category2" : [],
 }
 @app.after_request
@@ -78,7 +69,7 @@ def rem_user(username):
 # 3_final [List all categories]
 @app.route('/api/v1/categories', methods=['GET'])
 def list_categories():
-    if not request.is_json:
+    if not request.is_json :
          abort(405)
     if(len(categories) > 0):
         return jsonify(no_of_acts_categories_dict),200
@@ -115,9 +106,9 @@ def remove_category(categoryName):
 # 6_final  [List acts for a given category]
 @app.route('/api/v1/categories/<string:categoryName>/acts', methods=['GET'])
 def list_acts_for_category(categoryName):
-    if not request.is_json or len(request.json) != 0:
+    if not request.is_json:
         abort(400)
-    elif categoryName in acts_list_categories_dict:
+    if categoryName in acts_list_categories_dict:
         acts_list = acts_list_categories_dict[categoryName]
         len_acts_list = len(acts_list)
         if(len_acts_list == 0):
@@ -237,7 +228,7 @@ def upload_an_act():
     d["timestamp"] = request.json["timestamp"]
     d["caption"] = request.json["caption"]
     d["upvotes"] = 0
-    d["imgUrl"] = request.json["imgB64"]
+    d["imgUrl"] = request.json["img"]
     acts_list_categories_dict[request.json["categoryName"]].append(d)
     return jsonify({}), 201
 
