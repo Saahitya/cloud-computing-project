@@ -5,7 +5,7 @@ app = Flask(__name__)
 categories = set(["category1", "category2"]);
 
 no_of_acts_categories_dict = {
-    "category1" : 2,
+    "category1" : 1,
     "category2" : 0,
 }
 
@@ -62,6 +62,7 @@ def add_user():
 # 2_final [Remove users]
 @app.route('/api/v1/users/<string:username>',methods = ['DELETE'])
 def rem_user(username):
+    #print(username)
     if not request.is_json or len(request.json) != 0:
         abort(400)
     users = []
@@ -194,48 +195,6 @@ def delete_act(task_id):
                 return jsonify({}),200
     abort(405)
 
-
-# 11_final []
-# @app.route('/api/v1/acts', methods=['POST'])
-# def upload_an_act():
-#     if not request.is_json or len(request.json) != 6:
-#             abort(400)
-#     #The ​actID​ in the request body must be globally unique(1,7)
-#     for i in acts_list_categories_dict.values():
-#         for j in i:
-#             if j[actId]==request.json[0]:
-#                 abort(400)
-#     #The username must exist(3)
-#     int flag = 0
-#     for i in user_list:
-#         if i["username"] == request.json[1]:
-#             flag = 1
-#             break
-#     if flag==0:
-#         abort(400)
-#     #No upvotes field should be sent(5)
-#     if "upvotes" in request.json.keys():
-#         abort(400)
-#     #The category name must exist(6)
-#     if request.json[4] not in categories:
-#         abort(400)
-#     #Uploading the act
-#     no_of_acts_categories_dict[json.request[4]] = no_of_acts_categories_dict[json.request[4]]+1
-#     d = dict()
-#     d["actId"] = json.request[0]
-#     d["timestamp"] = json.request[2]
-#     d["caption"] = json.request[3]
-#     d["upvotes"] = 0
-#     d["imgUrl"] = json.request[5]
-#     acts_list_categories_dict[json.request[4]].append(d)
-#     return jsonify({}), 200
-# import base64
-# import binascii
-#
-# try:
-#     base64.decodestring("foo")
-# except binascii.Error:
-#     print "no correct base64"
 
 @app.route('/api/v1/acts', methods=['POST'])
 def upload_an_act():

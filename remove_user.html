@@ -1,0 +1,48 @@
+<html>
+<head>
+  <title>Remove User </title>
+</head>
+<body>
+  <label> User Name </label>
+  <input type="text" placeholder="User" id ="user"></br></br>
+  <button type="button" onclick="fun()">Submit</button>
+  <script>
+  function fun()
+  {
+    var user = document.getElementById("user").value ;
+    if(user == "")
+    {
+      alert("User field is empty");
+      location.replace("remove_user.html");
+    }
+    //alert(user);
+    req = new XMLHttpRequest();
+    var url = "http://127.0.0.1:5000/api/v1/users/"+user;
+    //alert(url);
+    req.open("DELETE", url, true);
+    req.setRequestHeader("Content-type", "application/json");
+    var data = JSON.stringify([]);
+    req.send(data);
+    req.onload = function ()
+    {
+      //alert(req.status);
+      if(req.status == 200)
+      {
+        alert("User Deleted");
+        location.replace("index.html");
+      }
+      else if(req.status == 405)
+      {
+        alert("User Does Not Exists");
+        location.relace("remove_user.html");
+      }
+      else
+      {
+        alert("Format Error!");
+        location.replace("remove_user.html");
+      }
+    }
+  }
+  </script>
+</body>
+</html>
