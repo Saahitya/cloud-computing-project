@@ -28,6 +28,12 @@ acts_list_categories_dict = {
     "category2" : [],
 }
 
+#0
+
+@app.route('/')
+def hello_world():
+    return "Hello, World!"
+
 # 1_final [Add users]
 @app.route('/api/v1/users',methods = ['POST'])
 def add_user():
@@ -224,4 +230,4 @@ def delete_act(task_id):
 #     return jsonify({}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=80)
