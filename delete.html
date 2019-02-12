@@ -4,12 +4,17 @@
 </head>
 <body>
   <label>Category</label>
-  <input type = "text" placeholder = "category" id = "input"><br>
-  <button type="button" onclick="delete_cat()"> Delete </button>
+  <input type = "text" placeholder = "category" id = "input" required><br>
+  <button type="submit" onclick="delete_cat()"> Delete </button>
 <script>
 function delete_cat()
 {
   var category_name = document.getElementById("input").value;
+  if(category_name == "")
+  {
+    alert("Category Field is Empty");
+    location.replace("delete.html");
+  }
   req = new XMLHttpRequest();
   var url = "http://127.0.0.1:5000/api/v1/categories/" +category_name;
   //alert(url);

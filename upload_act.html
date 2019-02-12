@@ -4,7 +4,7 @@
 </head>
 <body>
   <label> Actid </label> <br> <br>
-  <input type="text" placeholder="ID" id = "actid"><br><br>
+  <input type="number" placeholder="ID" id = "actid"><br><br>
   <lable> Username </label><br><br>
   <input type="text" placeholder="name" id = "name"><br><br>
   <label>TimeStamp</label><br><br>
@@ -12,19 +12,49 @@
   <label> Caption </label><br><br>
   <input type="text" placeholder="Caption" id = "caption"><br><br>
   <label> Image Base 64</label><br><br>
-  <input type="text" placeholder="Base64" id = "image"><br><br>
+  <input type="text" placeholder="image" id = "image"><br><br>
   <label> Category </label><br><br>
   <input type="text" placeholder="category" id = "cat"></br></br>
-  <button type="button" onclick = "fun()">Submit</button>
+  <button type="submit" onclick = "fun()">Submit</button>
   <script>
   function fun()
   {
     var id = document.getElementById("actid").value;
+    if(id == "")
+    {
+      alert("ID feild is empty");
+      location.replace("upload_act.html");
+    }
     var name = document.getElementById("name").value;
+    if(name == "")
+    {
+      alert("Name Field is Empty");
+      location.replace("upload_act.html");
+    }
     var time = document.getElementById("time").value;
+    if(time == "")
+    {
+      alert("Time field is empty");
+      location.replace("upload_act.html");
+    }
     var caption = document.getElementById("caption").value;
+    if(caption == "")
+    {
+      alert("Caption Field is empty");
+      location.replace("upload_act.html");
+    }
     var image = document.getElementById("image").value;
+    if(image == "")
+    {
+      alert("Image field is empty");
+      location.replace("upload_act.html");
+    }
     var cat = document.getElementById("cat").value;
+    if(cat == "")
+    {
+      alert("Category Field is empty");
+      location.replace("upload_act.html");
+    }
     var d = {};
     d["actId"] = Number(id);
     d["timestamp"] = time;

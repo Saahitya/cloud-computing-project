@@ -1,12 +1,16 @@
 const app = document.getElementById('root');
 
 const logo = document.createElement('img');
-logo.src = './logo.png';
+logo.src = 'logo4.png';
 
 const container = document.createElement('div');
 container.setAttribute('class', 'container');
-
-app.appendChild(logo);
+logo.setAttribute("width","25%");
+logo.setAttribute("height","30%")
+logo.setAttribute("style","margin-top:50%");
+logo.setAttribute("style","border-radius:60%");
+//logo.setAttribute("style","margin-bottom:5%");
+//app.appendChild(logo);
 app.appendChild(container);
 
 var request = new XMLHttpRequest();
@@ -32,15 +36,17 @@ request.onload = function () {
       const a = document.createElement('a');
       var url = "act.html?"+key;
       a.setAttribute("href",url);
-      a.textContent = "Link";
+      const h2 = document.createElement("h1");
+      h2.textContent = "Acts";
       const h3 = document.createElement('p');
       //movie.description = data[key];
-      h3.textContent = `${data[key]}`;
+      //h3.textContent = `${data[key]}`;
 
       container.appendChild(card);
       card.appendChild(h1);
       card.appendChild(h3);
       card.appendChild(a);
+      a.appendChild(h2);
       //card.append(logo.cloneNode(true));
     }
   } else {

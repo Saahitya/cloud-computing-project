@@ -1,5 +1,6 @@
 <!doctype html>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Nova+Flat|Righteous" rel="stylesheet">
 
 <html>
 <head>
@@ -10,13 +11,16 @@
   <link href="style.css" rel="stylesheet">
 </head>
 <body onload = "fun()">
-  <div id ="root"></div>
+  <h1 id ="head" style="font-size:25px;"></h1>
+  <div id ="root" style="font-family:Righteous"></div>
   <script>
   function fun()
   {
     var cur_url = document.URL;
     var arr = cur_url.split("?");
     var cat = arr[1];
+    const head = document.getElementById("head");
+    head.textContent = cat;
     req = new XMLHttpRequest();
     var url = "http://127.0.0.1:5000/api/v1/categories/" +cat+"/acts";
     req.open("GET", url, true);
@@ -43,24 +47,28 @@
           const card = document.createElement("div");
           card.setAttribute("class","card");
           const h1 = document.createElement('h1');
-          h1.textContent = data[i]["actId"];
+          h1.textContent = "Act Id :"+data[i]["actId"];
+          h1.setAttribute("class","helper");
           const h2 = document.createElement("h1");
-          h2.textContent = data[i]["caption"];
+          h2.textContent = "Caption :"+data[i]["caption"];
           container.appendChild(card);
           const h3 = document.createElement("h1");
-          h3.textContent = data[i]["upvotes"];
+          h3.textContent = "Upvotes :"+data[i]["upvotes"];
+          //const h5 = document.createElement("button");
+          //h5.textContent = "Upvote";
           container.appendChild(card);
           var src_path = "data:image/jpeg;base64,"+data[i]["imgUrl"];
           //alert(src_path);
           const h4 = document.createElement("h1");
-          h4.textContent = data[i]["timestamp"];
+          h4.textContent = "Timestamp :"+data[i]["timestamp"];
           const image = document.createElement("img");
           image.setAttribute("src",src_path);
           card.appendChild(h1);
           card.appendChild(h2);
-          card.appendChild(h3);
+          //card.appendChild(h5);
           card.appendChild(h4);
           card.appendChild(image);
+          card.appendChild(h3);
         }
         //alert(data[0]["actId"]);
       }
@@ -79,9 +87,18 @@
       }
     }
   }
+  function upvote()
+  {
+    var dom = document.getElementByClassName("")
+  }
   </script>
-  <a href = "upload_act.html"><button type="button" class = "btn btn-default" style="width:100%;"><i class="glyphicon glyphicon-upload"></i><span>Upload Act</span></button></a>
-  <a href = "remove_act.html"><button type="button" class = "btn btn-default" style="width:100%;"><i class="glyphicon glyphicon-upload"></i><span>Remove Act</span></button></a>
-
+  <div class = "row">
+  <div class ="col-lg-6">
+  <a href = "upload_act.html"><button type="button" class = "btn btn-success" style="width:100%;"><i class="glyphicon glyphicon-upload"></i><span>Upload Act</span></button></a>
+  </div>
+  <div class = "col-lg-6">
+  <a href = "remove_act.html"><button type="button" class = "btn btn-danger" style="width:100%;"><i class="glyphicon glyphicon-upload"></i><span>Remove Act</span></button></a>
+  </div>
+</div>
 </body>
 </html>

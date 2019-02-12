@@ -5,13 +5,18 @@
 <body>
   <div>
     <label>Category Name</label>
-    <input type="text" placeholder="Category" id = "input"><br>
-    <button type="button" onclick="add_cat()">Create</button>
+    <input type="text" placeholder="Category" id = "input" required><br>
+    <button type="submit" onclick="add_cat()">Create</button>
   </div>
   <script>
   function add_cat()
   {
       var category_name = document.getElementById("input").value;
+      if(category_name == "")
+      {
+        alert("Category Field is Empty");
+        location.replace("newcategory.html");
+      }
       req = new XMLHttpRequest();
       var url = "http://127.0.0.1:5000/api/v1/categories";
       req.open("POST", url, true);
