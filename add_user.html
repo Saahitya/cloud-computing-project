@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>New User</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('images/bg-03.jpg');">
+			<div class="wrap-login100">
+				<div class="login100-form validate-form">
+					<span class="login100-form-logo">
+						<!-- <i class="zmdi zmdi-landscape"></i> -->
+						<img src="images/icons/humanity.png" alt="logo">
+					</span>
+
+					<span class="login100-form-title p-b-34 p-t-27">
+						New User
+					</span>
+
+					<div class="wrap-input100 validate-input" >
+						<input class="input100" type="text" name="username" placeholder="Username" id="user">
+						<span class="focus-input100" data-placeholder="&#xf207;"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" >
+						<input class="input100" type="password" name="pass" placeholder="Password" id = "pass">
+						<span class="focus-input100" data-placeholder="&#xf191;"></span>
+					</div>
+
+
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" onclick="add()">
+							Add New User
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="dropDownSelect1"></div>
+	 <script>
+		  function add()
+		  {
+		    var user_name = document.getElementById("user").value;
+		    var password = document.getElementById("pass").value;
+		    if(password == "")
+		    {
+		      alert("Empty Password Field");
+		      location.replace("add_user.html");
+		    }
+		    if(user_name == "")
+		    {
+		      alert("Empty User Field");
+		      location.replace("add_user.html");
+		    }
+		    //alert(user_name);
+		    //alert(password);
+		    req = new XMLHttpRequest();
+		    var url = "http://127.0.0.1:5000/api/v1/users";
+		    req.open("POST", url, true);
+		    req.setRequestHeader("Content-type", "application/json");
+		    var user_dict = {"username":user_name,"password":password};
+		    var data = JSON.stringify(user_dict);
+		    req.send(data);
+				//alert("sent");
+		    req.onload = function()
+		    {
+					//alert("Hii inside function");
+		      if(req.status == 201)
+		      {
+						alert("User added");
+						location.replace("index.html");
+		      }
+		      else if(req.status == 405)
+		      {
+			alert("Error:User Already Exists or wrong SHA-1 Fromat");
+			location.replace("add_user.html");
+		      }
+		      else
+		      {
+			alert("Connection Problem!Try Again");
+			location.replace("add_user.html");
+		      }
+		    }
+		  }
+ 	 </script>
+
+</body>
+</html>
