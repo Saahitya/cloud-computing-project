@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request, abort
+import re
 #d
 app = Flask(__name__)
 
@@ -76,6 +77,7 @@ def list_categories():
     else:
         return jsonify({}),204
 
+
 # 4_final  [Add a category]
 @app.route('/api/v1/categories', methods=['POST'])
 def add_category():
@@ -151,8 +153,6 @@ def acts_in_range(categoryName, startRange, endRange):
             return jsonify(i), 200
     abort(405)
 
-
-
 # 9_final [Upvote an act]
 @app.route('/api/v1/acts/upvote', methods=['POST'])
 def upvote_an_act():
@@ -164,7 +164,6 @@ def upvote_an_act():
 				j["upvotes"] = j["upvotes"]+1
 				return jsonify({}), 200
 	abort(405)
-
 # 10_final [Remove an act]
 @app.route('/api/v1/acts/<int:task_id>',methods = ['DELETE'])
 def delete_act(task_id):
@@ -185,7 +184,6 @@ def delete_act(task_id):
                 no_of_acts_categories_dict[i] = no_of_acts_categories_dict[i] - 1
                 return jsonify({}),200
     abort(405)
-
 
 @app.route('/api/v1/acts', methods=['POST'])
 def upload_an_act():
@@ -220,6 +218,14 @@ def upload_an_act():
     # Validating base_64 password
     # if( not re.match(r"^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$", json.request["imgB64"])):
     #      abort(400)
+    def is_base64(string):
+        if len(string) % 4 == 0 and re.match('^[A-Za-z0-9+\/=]+\Z', string):
+            return(True)
+        else:
+            return(False)
+
+    if (not is_base64(request.json["imgB64"])):
+        abort(400)
 
     #Uploading the act
     no_of_acts_categories_dict[request.json["categoryName"]] = no_of_acts_categories_dict[request.json["categoryName"]]+1
@@ -228,7 +234,7 @@ def upload_an_act():
     d["timestamp"] = request.json["timestamp"]
     d["caption"] = request.json["caption"]
     d["upvotes"] = 0
-    d["imgUrl"] = request.json["img"]
+    d["imgUrl"] = request.json["imgB64"]
     acts_list_categories_dict[request.json["categoryName"]].append(d)
     return jsonify({}), 201
 

@@ -60,6 +60,7 @@
     d["timestamp"] = time;
     d["caption"] = caption;
     d["img"] = image;
+    //alert(image64);
     d["username"] = name;
     d["categoryName"] = cat;
     req = new XMLHttpRequest();
@@ -82,7 +83,7 @@
       }
       else
       {
-          alert("Error In Sending Try Again");
+          alert("Base_64 Encryption wrong");
           location.replace("upload_act.html");
       }
     }

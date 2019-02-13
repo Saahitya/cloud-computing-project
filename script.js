@@ -38,7 +38,8 @@ request.onload = function () {
       a.setAttribute("href",url);
       const h2 = document.createElement("h1");
       h2.textContent = "Acts";
-      const h3 = document.createElement('p');
+      const h3 = document.createElement('h1');
+      h3.textContent = "Number of Acts: " + `${data[key]}`;
       //movie.description = data[key];
       //h3.textContent = `${data[key]}`;
 
