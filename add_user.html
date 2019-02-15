@@ -83,12 +83,12 @@
 		      }
 		      else if(req.status == 405)
 		      {
-			alert("Error:User Already Exists or wrong SHA-1 Fromat");
+			alert("User Already Exists");
 			location.replace("add_user.html");
 		      }
 		      else
 		      {
-			alert("Connection Problem!Try Again");
+			alert("Wrong SHA-1 Fromat");
 			location.replace("add_user.html");
 		      }
 		    }
