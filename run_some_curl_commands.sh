@@ -20,7 +20,7 @@ curl -i -H "Content-Type: application/json" -X POST -d '{"username":"shashank","
 
 curl -i -H "Content-Type: application/json" -X DELETE -d '{}' http://localhost:5000/api/v1/users/shashank
 
-curl -i -H "Content-Type: application/json" -X POST -d '["category3"]' http://localhost:5000/api/v1/categories
+curl -i -H "Content-Type: application/json" -X POST -d '["category3"]' http://18.233.241.63:80/api/v1/categories
 
 curl -i -H "Content-Type: application/json" -X DELETE -d '{}' http://localhost:5000/api/v1/categories/category1
 

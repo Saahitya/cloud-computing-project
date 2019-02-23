@@ -74,13 +74,14 @@
 		      alert("Empty User Field");
 		      location.replace("add_user.html");
 		    }
+				var conv_pass = SHA1(password);
 		    //alert(user_name);
 		    //alert(password);
 		    req = new XMLHttpRequest();
 		    var url = "http://127.0.0.1:5000/api/v1/users";
 		    req.open("POST", url, true);
 		    req.setRequestHeader("Content-type", "application/json");
-		    var user_dict = {"username":user_name,"password":password};
+		    var user_dict = {"username":user_name,"password":conv_pass};
 		    var data = JSON.stringify(user_dict);
 		    req.send(data);
 				//alert("sent");
