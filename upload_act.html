@@ -44,7 +44,8 @@
 
 
 					<div class="wrap-input100 validate-input">
-						<input class="input100" type="text" placeholder="Base 64 image" id = "image">
+						<!-- <input class="input100" type="text" placeholder="Base 64 image" id = "image"> -->
+						<input class="input100" type="file" placeholder="Upload image" accept="image/*" id = "image">
 					</div>
 
 					<div class="wrap-input100 validate-input">
@@ -70,19 +71,28 @@
 
 
 <script>
+	var imgb64;
   function fun()
   {
     var id = document.getElementById("actid").value;
     var name = document.getElementById("name").value;
     var time = document.getElementById("time").value;
     var caption = document.getElementById("caption").value;
-    var image = document.getElementById("image").value;
+		var image = document.getElementById("image");
+		var file = image.files[0];
+		var reader = new FileReader();
+		reader.readAsDataURL(file)
+		reader.onload = function(e) {
+			imgb64 = e.target.result;
+			// console.log(e.target.result);
+		}
     var cat = document.getElementById("cat").value;
     var d = {};
     d["actId"] = Number(id);
     d["timestamp"] = time;
     d["caption"] = caption;
-    d["imgB64"] = image;
+		d["imgB64"] = imgb64;
+		console.log(imgb64);
     d["username"] = name;
     d["categoryName"] = cat;
     req = new XMLHttpRequest();
