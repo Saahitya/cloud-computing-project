@@ -32,3 +32,5 @@ curl -i -H "Content-Type: application/json" -X POST -d '{"actId":272727,"usernam
  8b832b62abf2bd5180f6a225e4b99cac1392ea10
 
  curl -i -H "Content-Type: application/json" -X GET -d '{}' http://localhost:5000/api/v1/categories/category1/acts
+
+ curl -i -H "Content-Type: application/json" -X POST -d '["category3"]' http://localhost:5000/shutdown
