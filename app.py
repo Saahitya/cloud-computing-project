@@ -116,7 +116,7 @@ def list_acts_for_category(categoryName):
         len_acts_list = len(acts_list)
         if(len_acts_list == 0):
             return jsonify([]), 204
-        elif(len_acts_list > 500) :
+        elif(len_acts_list > 100) :
             abort(413)
         else:
             return jsonify(acts_list), 200
