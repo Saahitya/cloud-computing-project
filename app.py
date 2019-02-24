@@ -163,7 +163,7 @@ def upvote_an_act():
 		for j in i:
 			if j["actId"]==request.json[0]:
 				j["upvotes"] = j["upvotes"]+1
-				return jsonify([]), 200
+				return jsonify({}), 200
 	abort(405)
 # 10_final [Remove an act]
 @app.route('/api/v1/acts/<int:task_id>',methods = ['DELETE'])
