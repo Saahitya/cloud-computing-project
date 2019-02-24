@@ -111,6 +111,24 @@ def remove_category(categoryName):
 def list_acts_for_category(categoryName):
     if not request.is_json:
         abort(400)
+    if 'start' in request.args and 'end' in request.args:
+        startRange = int(request.args.get('start'))
+        endRange = int(request.args.get('end'))
+        if categoryName not in no_of_acts_categories_dict.keys():
+            return jsonify([]), 405
+        elif (startRange<1) or (endRange>no_of_acts_categories_dict[categoryName]):
+            abort(400)
+        elif (endRange-startRange+1>100):
+            abort(413)
+        else:
+            ans = []
+            i = len(acts_list_categories_dict[categoryName])-startRange
+            f = endRange-startRange+1
+            while(f>0):
+                ans.append(acts_list_categories_dict[categoryName][i])
+                i = i-1
+                f = f-1
+            return jsonify(ans), 200
     if categoryName in acts_list_categories_dict:
         acts_list = acts_list_categories_dict[categoryName]
         len_acts_list = len(acts_list)
@@ -135,24 +153,6 @@ def number_of_acts_for_category(categoryName):
         return jsonify([no_of_acts_categories_dict[categoryName]])
     else:
         abort(405)
-
-# 8_final [Return acts for a given category in a given range]
-@app.route('/api/v1/categories/<string:categoryName>/acts?start=<int:startRange>&end=<int:endRange>', methods=['GET'])
-def acts_in_range(categoryName, startRange, endRange):
-    if not request.is_json or len(request) != 0:
-        abort(400)
-    elif categoryName not in no_of_acts_categories_dict.keys():
-        return jsonify([]), 204
-    else:
-        for i in acts_list_categories_dict[categoryName]:
-            if((k >= startRange) and (k <= endRange)):
-                range_list.append(i)
-            k = k + 1
-        if(len(range_list) > 100):
-            abort(413)
-        else:
-            return jsonify(i), 200
-    abort(405)
 
 # 9_final [Upvote an act]
 @app.route('/api/v1/acts/upvote', methods=['POST'])
@@ -197,8 +197,8 @@ def upload_an_act():
                 abort(405)
 
     #Validatin date and time (2)
-    #if(request.json["timestamp"] != datetime.strptime(request.json["timestamp"], "%\d-%m-%y %S:%M:%H")):
-    #    abort(400)
+    if(not re.match('[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9][0-9][0-9]:[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9]', request.json["timestamp"])):
+        abort(400)
     flag = 0
     for i in user_list:
         if i["username"] == request.json["username"]:
