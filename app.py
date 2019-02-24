@@ -130,7 +130,7 @@ def number_of_acts_for_category(categoryName):
     if not request.is_json or len(request.json) != 0:
         abort(400)
     elif categoryName not in no_of_acts_categories_dict.keys():
-        return jsonify([]), 204
+        return jsonify([]), 405
     elif categoryName in no_of_acts_categories_dict.keys():
         return jsonify([no_of_acts_categories_dict[categoryName]])
     else:
@@ -163,7 +163,7 @@ def upvote_an_act():
 		for j in i:
 			if j["actId"]==request.json[0]:
 				j["upvotes"] = j["upvotes"]+1
-				return jsonify({}), 200
+				return jsonify([]), 200
 	abort(405)
 # 10_final [Remove an act]
 @app.route('/api/v1/acts/<int:task_id>',methods = ['DELETE'])
@@ -236,6 +236,7 @@ def upload_an_act():
     d["caption"] = request.json["caption"]
     d["upvotes"] = 0
     d["imgB64"] = request.json["imgB64"]
+    d["username"] = request.json["username"]
     acts_list_categories_dict[request.json["categoryName"]].append(d)
     return jsonify({}), 201
 
