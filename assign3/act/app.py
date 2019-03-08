@@ -27,43 +27,6 @@ def after_request(response):
   response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
   return response
 
-# 1_final [Add users]
-@app.route('/api/v1/users',methods = ['POST'])
-def add_user():
-    users = []	#List of existing usernames in the database
-    for i in user_list:
-        users.append(i["username"])
-    if(request.json["username"] not in users):
-        hex = ['a','b','c','d','e','f','0','1','2','3','4','5','6','7','8','9']
-        passwd = request.json["password"]
-        if(len(passwd) == 40):
-            for i in passwd:
-                if(i not in hex):
-                    abort(400)
-            d = {}
-            d["username"] = request.json["username"]
-            d["password"] = request.json["password"]
-            user_list.append(d)
-            return jsonify({}),201
-        else:
-            abort(400)
-    else:
-        abort(405)
-
-# 2_final [Remove users]
-@app.route('/api/v1/users/<string:username>',methods = ['DELETE'])
-def rem_user(username):
-    #print(username)
-    users = []
-    for i in user_list:
-        users.append(i["username"])
-    if(username in users):
-        index = users.index(username)
-        del(user_list[index])
-        return jsonify({}),200
-    else:
-        abort(405)
-
 # 3_final [List all categories]
 @app.route('/api/v1/categories', methods=['GET'])
 def list_categories():

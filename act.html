@@ -166,7 +166,16 @@
     const anc = document.getElementById("anc");
     anc.setAttribute("href","upvote.html?"+arr[1]);
     const head = document.getElementById("head");
-    head.textContent = cat;
+		var cat2;
+		if(cat.includes("%20"))
+		{
+			var arr2 = cat.split("%20");
+			cat2 = arr2[0] + " " + arr2[1];
+			head.textContent = cat2;
+		}
+    else {
+    	head.textContent = cat;
+    }
     req = new XMLHttpRequest();
     var url = "http://127.0.0.1:5000/api/v1/categories/" +cat+"/acts";
     req.open("GET", url, true);

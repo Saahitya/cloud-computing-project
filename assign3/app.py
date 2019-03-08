@@ -242,4 +242,4 @@ if __name__ == '__main__':
     user_list = pickle.load(open("user_list.p", "rb"))
     range_list = pickle.load( open("range_list.p", "rb"))
     acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
-    app.run()
+    app.run("0.0.0.0",port=80)
