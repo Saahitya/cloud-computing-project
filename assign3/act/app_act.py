@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request, abort
 import re
 import pickle
-#d
 app = Flask(__name__)
 
 # categories = set(["category1", "category2"]);
@@ -11,7 +10,6 @@ app = Flask(__name__)
 #     "category2" : 0,
 # }
 #
-# user_list = [] #List of dictionaries with each dictionary corresponding to one user with 2 keys : username and password
 #
 # range_list = []
 k=0
@@ -143,8 +141,11 @@ def upload_an_act():
     if(not re.match('[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9][0-9][0-9]:[0-9][0-9]\-[0-9][0-9]\-[0-9][0-9]', request.json["timestamp"])):
         abort(400)
     flag = 0
-    for i in user_list:
-        if i["username"] == request.json["username"]:
+    # assuming the other user container is linked to 0.0.0.0:5000
+    req = request.get("http://0.0.0.0:5000/api/v1/users")
+    usernames = req.json()
+    for i in usernames:
+        if i == request.json["username"]:
             flag = 1
             break
     if flag==0:
@@ -189,7 +190,6 @@ def shutdown_server():
         raise RuntimeError('Not running with the Werkzeug Server')
     pickle.dump(categories, open("categories.p", "wb"))
     pickle.dump(no_of_acts_categories_dict, open("no_of_acts_categories_dict.p", "wb"))
-    pickle.dump(user_list, open("user_list.p", "wb"))
     pickle.dump(range_list, open("range_list.p", "wb"))
     pickle.dump(acts_list_categories_dict, open("acts_list_categories_dict.p", "wb"))
     func()
@@ -202,7 +202,6 @@ def shutdown():
 if __name__ == '__main__':
     no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
     categories = pickle.load(open("categories.p", "rb"))
-    user_list = pickle.load(open("user_list.p", "rb"))
     range_list = pickle.load( open("range_list.p", "rb"))
     acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
     app.run()
