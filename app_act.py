@@ -3,6 +3,7 @@ import requests
 import re
 import pickle
 app = Flask(__name__)
+app_count = 0
 
 # categories = set(["category1", "category2"]);
 #
@@ -24,11 +25,14 @@ def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')
   response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
   response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  response.headers.add('Origin','35.170.87.49')
   return response
 
 # 3_final [List all categories]
 @app.route('/api/v1/categories', methods=['GET'])
 def list_categories():
+    global app_count
+    app_count = app_count + 1
     if(len(categories) > 0):
         return jsonify(no_of_acts_categories_dict),200
     else:
@@ -38,6 +42,8 @@ def list_categories():
 # 4_final  [Add a category]
 @app.route('/api/v1/categories', methods=['POST'])
 def add_category():
+    global app_count
+    app_count = app_count + 1
     if request.json[0] not in categories:
         category = request.json[0]
         no_of_acts_categories_dict[category] = 0
@@ -50,6 +56,8 @@ def add_category():
 # 5_final  [Remove a category]
 @app.route('/api/v1/categories/<string:categoryName>', methods=['DELETE'])
 def remove_category(categoryName):
+    global app_count
+    app_count = app_count + 1
     if categoryName in no_of_acts_categories_dict.keys() and categoryName in categories:
         no_of_acts_categories_dict.pop(categoryName)
         acts_list_categories_dict.pop(categoryName)
@@ -61,6 +69,8 @@ def remove_category(categoryName):
 # 6_final  [List acts for a given category]
 @app.route('/api/v1/categories/<string:categoryName>/acts', methods=['GET'])
 def list_acts_for_category(categoryName):
+    global app_count
+    app_count = app_count + 1
     if 'start' in request.args and 'end' in request.args:
         startRange = int(request.args.get('start'))
         endRange = int(request.args.get('end'))
@@ -95,6 +105,8 @@ def list_acts_for_category(categoryName):
 # 7_final [Number of acts in a category]
 @app.route('/api/v1/categories/<string:categoryName>/acts/size', methods=['GET'])
 def number_of_acts_for_category(categoryName):
+    global app_count
+    app_count = app_count + 1
     if categoryName not in no_of_acts_categories_dict.keys():
         return jsonify([]), 405
     elif categoryName in no_of_acts_categories_dict.keys():
@@ -105,15 +117,19 @@ def number_of_acts_for_category(categoryName):
 # 9_final [Upvote an act]
 @app.route('/api/v1/acts/upvote', methods=['POST'])
 def upvote_an_act():
-	for i in acts_list_categories_dict.values():
-		for j in i:
-			if j["actId"]==request.json[0]:
-				j["upvotes"] = j["upvotes"]+1
-				return jsonify({}), 200
-	abort(405)
+    global app_count
+    app_count = app_count + 1
+    for i in acts_list_categories_dict.values():
+        for j in i:
+            if j["actId"]==request.json[0]:
+                j["upvotes"] = j["upvotes"]+1
+                return jsonify({}), 200
+    abort(405)
 # 10_final [Remove an act]
 @app.route('/api/v1/acts/<int:task_id>',methods = ['DELETE'])
 def delete_act(task_id):
+    global app_count
+    app_count = app_count + 1
     # for i in acts_list_categories_dict.values():
     #     for j in range(len(i)):
     #         if j["actId"]==task_id:
@@ -132,6 +148,8 @@ def delete_act(task_id):
 
 @app.route('/api/v1/acts', methods=['POST'])
 def upload_an_act():
+    global app_count
+    app_count = app_count + 1
     #The ​actID​ in the request body must be globally unique(1,7)
     for i in acts_list_categories_dict.values():
         for j in i:
@@ -143,7 +161,7 @@ def upload_an_act():
         abort(400)
     flag = 0
     # assuming the other user container is linked to 0.0.0.0:5000
-    req = requests.get("http://35.170.87.49:8080/api/v1/users")
+    req = requests.get("http://54.86.75.218:8000/api/v1/users",headers={"Origin":"35.171.62.224"})
     usernames = req.json()
     for i in usernames:
         if i == request.json["username"]:
@@ -200,6 +218,29 @@ def shutdown():
     shutdown_server()
     return 'Server shutting down...'
 
+@app.route('/api/v1/_count',methods=['GET'])
+def count_fun():
+    count_list = []
+    count_list.append(app_count)
+    return jsonify(count_list),200
+
+@app.route('/api/v1/_count',methods=['DELETE'])
+def del_count():
+    global app_count
+    app_count = 0
+    return jsonify({}),200
+
+@app.route('/api/v1/acts/count',methods=['GET'])
+def count1():
+    global app_count
+    app_count = app_count + 1
+    #if(len(no_of_acts_categories_dict) == 0):
+    #    return jsonify({}),405
+    count1 = list(no_of_acts_categories_dict.values())
+    count_sum = sum(count1)
+    l = []
+    l.append(count_sum)
+    return jsonify(l),200
 if __name__ == '__main__':
     no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
     categories = pickle.load(open("categories.p", "rb"))
