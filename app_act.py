@@ -4,7 +4,7 @@ import re
 import pickle
 app = Flask(__name__)
 app_count = 0
-
+health_flag = 0
 # categories = set(["category1", "category2"]);
 #
 # no_of_acts_categories_dict = {
@@ -31,6 +31,8 @@ def after_request(response):
 # 3_final [List all categories]
 @app.route('/api/v1/categories', methods=['GET'])
 def list_categories():
+    if(health_flag == 1):
+        return jsonify({}),500
     global app_count
     app_count = app_count + 1
     if(len(categories) > 0):
@@ -42,6 +44,8 @@ def list_categories():
 # 4_final  [Add a category]
 @app.route('/api/v1/categories', methods=['POST'])
 def add_category():
+    if(health_flag == 1):
+        return jsonify({}),500
     global app_count
     app_count = app_count + 1
     if request.json[0] not in categories:
@@ -56,6 +60,8 @@ def add_category():
 # 5_final  [Remove a category]
 @app.route('/api/v1/categories/<string:categoryName>', methods=['DELETE'])
 def remove_category(categoryName):
+    if(health_flag == 1):
+        return jsonify({}),500
     global app_count
     app_count = app_count + 1
     if categoryName in no_of_acts_categories_dict.keys() and categoryName in categories:
@@ -69,6 +75,8 @@ def remove_category(categoryName):
 # 6_final  [List acts for a given category]
 @app.route('/api/v1/categories/<string:categoryName>/acts', methods=['GET'])
 def list_acts_for_category(categoryName):
+    if(health_flag == 1):
+        return jsonify({}),500
     global app_count
     app_count = app_count + 1
     if 'start' in request.args and 'end' in request.args:
@@ -105,6 +113,8 @@ def list_acts_for_category(categoryName):
 # 7_final [Number of acts in a category]
 @app.route('/api/v1/categories/<string:categoryName>/acts/size', methods=['GET'])
 def number_of_acts_for_category(categoryName):
+    if(health_flag == 1):
+        return jsonify({}),500
     global app_count
     app_count = app_count + 1
     if categoryName not in no_of_acts_categories_dict.keys():
@@ -117,6 +127,8 @@ def number_of_acts_for_category(categoryName):
 # 9_final [Upvote an act]
 @app.route('/api/v1/acts/upvote', methods=['POST'])
 def upvote_an_act():
+    if(health_flag == 1):
+        return jsonify({}),500
     global app_count
     app_count = app_count + 1
     for i in acts_list_categories_dict.values():
@@ -128,6 +140,8 @@ def upvote_an_act():
 # 10_final [Remove an act]
 @app.route('/api/v1/acts/<int:task_id>',methods = ['DELETE'])
 def delete_act(task_id):
+    if(health_flag == 1):
+        return jsonify({}),500
     global app_count
     app_count = app_count + 1
     # for i in acts_list_categories_dict.values():
@@ -148,6 +162,8 @@ def delete_act(task_id):
 
 @app.route('/api/v1/acts', methods=['POST'])
 def upload_an_act():
+    if(health_flag == 1):
+        return jsonify({}),500
     global app_count
     app_count = app_count + 1
     #The ​actID​ in the request body must be globally unique(1,7)
@@ -220,18 +236,24 @@ def shutdown():
 
 @app.route('/api/v1/_count',methods=['GET'])
 def count_fun():
+    if(health_flag == 1):
+        return jsonify({}),500
     count_list = []
     count_list.append(app_count)
     return jsonify(count_list),200
 
 @app.route('/api/v1/_count',methods=['DELETE'])
 def del_count():
+    if(health_flag == 1):
+        return jsonify({}),500
     global app_count
     app_count = 0
     return jsonify({}),200
 
 @app.route('/api/v1/acts/count',methods=['GET'])
 def count1():
+    if(health_flag == 1):
+        return jsonify({}),500
     global app_count
     app_count = app_count + 1
     #if(len(no_of_acts_categories_dict) == 0):
@@ -241,6 +263,18 @@ def count1():
     l = []
     l.append(count_sum)
     return jsonify(l),200
+
+@app.route('/api/v1/_health',methods=['GET'])
+def health_check():
+    if(health_flag == 1):
+        return jsonify({}),500
+    else:
+        return jsonify({}),200
+@app.route('/api/v1/_crash',methods=['POST'])
+def crash_server():
+    global health_flag
+    health_flag = 1
+    return josnify({})
 if __name__ == '__main__':
     no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
     categories = pickle.load(open("categories.p", "rb"))
