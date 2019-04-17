@@ -274,7 +274,7 @@ def health_check():
 def crash_server():
     global health_flag
     health_flag = 1
-    return josnify({})
+    return jsonify({}),200
 if __name__ == '__main__':
     no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
     categories = pickle.load(open("categories.p", "rb"))
