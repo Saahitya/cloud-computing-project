@@ -16,7 +16,7 @@ def auto_scale():
     global no_of_req
     print('Hello world!', file=sys.stderr)
     while(1):
-        time.sleep(120)
+        time.sleep(15)
         lock_no_of_req.acquire()
         num_cont_needed = (no_of_req // 20) + 1
         if(len(cont_dict) != num_cont_needed):
@@ -38,6 +38,8 @@ def auto_scale():
                     max_cont_id = max_cont_id - 1
                     extra_cont = extra_cont - 1
                 print(cont_dict,file=sys.stderr)
+        else:
+            print("Same number of containers",file=sys.stderr)
         no_of_req = 0
         lock_no_of_req.release()
 def init_container():
