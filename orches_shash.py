@@ -10,12 +10,14 @@ import time
 cont_dict = {}
 no_of_req = 0
 first_req = 0
+lock_no_of_req = threading.Lock()
 app = Flask(__name__)
 def auto_scale():
     global no_of_req
     print('Hello world!', file=sys.stderr)
     while(1):
         time.sleep(120)
+        lock_no_of_req.acquire()
         num_cont_needed = (no_of_req // 20) + 1
         if(len(cont_dict) != num_cont_needed):
             if(len(cont_dict) < num_cont_needed):
@@ -37,6 +39,7 @@ def auto_scale():
                     extra_cont = extra_cont - 1
                 print(cont_dict,file=sys.stderr)
         no_of_req = 0
+        lock_no_of_req.release()
 def init_container():
     con = os.popen("sudo docker run -p 8000:80 -d acts").read()
     con_real = con.rstrip()
@@ -44,6 +47,7 @@ def init_container():
 #app = Flask(__name__)
 @app.route('/api/v1/categories', methods=['GET'])
 def fun():
+    lock_no_of_req.acquire()
     global first_req
     global no_of_req
     if(first_req == 0):
@@ -62,10 +66,12 @@ def fun():
     headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = Response(resp.content, resp.status_code, headers)
     no_of_req = no_of_req + 1
+    lock_no_of_req.release()
     return response
 
 @app.route('/api/v1/categories', methods=['POST'])
 def cat_post():
+    lock_no_of_req.acquire()
     global no_of_req
     global first_req
     if(first_req == 0):
@@ -84,10 +90,12 @@ def cat_post():
     headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = Response(resp.content, resp.status_code, headers)
     no_of_req = no_of_req + 1
+    lock_no_of_req.release()
     return response
 
 @app.route('/api/v1/categories/<string:categoryName>', methods=['DELETE'])
 def rem_cat(categoryName):
+    lock_no_of_req.acquire()
     global no_of_req
     global first_req
     if(first_req == 0):
@@ -106,10 +114,12 @@ def rem_cat(categoryName):
     headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = Response(resp.content, resp.status_code, headers)
     no_of_req = no_of_req + 1
+    lock_no_of_req.release()
     return response
 
 @app.route('/api/v1/categories/<string:categoryName>/acts', methods=['GET'])
 def list_acts_for_category(categoryName):
+    lock_no_of_req.acquire()
     global no_of_req
     global first_req
     if(first_req == 0):
@@ -128,10 +138,12 @@ def list_acts_for_category(categoryName):
     headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = Response(resp.content, resp.status_code, headers)
     no_of_req = no_of_req + 1
+    lock_no_of_req.release()
     return response
 
 @app.route('/api/v1/categories/<string:categoryName>/acts/size', methods=['GET'])
 def number_of_acts_for_category(categoryName):
+    lock_no_of_req.acquire()
     global no_of_req
     global first_req
     if(first_req == 0):
@@ -150,10 +162,12 @@ def number_of_acts_for_category(categoryName):
     headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = Response(resp.content, resp.status_code, headers)
     no_of_req = no_of_req + 1
+    lock_no_of_req.release()
     return response
 
 @app.route('/api/v1/acts/upvote', methods=['POST'])
 def upvote_an_act():
+    lock_no_of_req.acquire()
     global no_of_req
     global first_req
     if(first_req == 0):
@@ -172,10 +186,12 @@ def upvote_an_act():
     headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = Response(resp.content, resp.status_code, headers)
     no_of_req = no_of_req + 1
+    lock_no_of_req.release()
     return response
 
 @app.route('/api/v1/acts/<int:task_id>',methods = ['DELETE'])
 def delete_act(task_id):
+    lock_no_of_req.acquire()
     global no_of_req
     global first_req
     if(first_req == 0):
@@ -194,10 +210,12 @@ def delete_act(task_id):
     headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = Response(resp.content, resp.status_code, headers)
     no_of_req = no_of_req + 1
+    lock_no_of_req.release()
     return response
 
 @app.route('/api/v1/acts', methods=['POST'])
 def upload_an_act():
+    lock_no_of_req.acquire()
     global no_of_req
     global first_req
     if(first_req == 0):
@@ -216,10 +234,12 @@ def upload_an_act():
     headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = Response(resp.content, resp.status_code, headers)
     no_of_req = no_of_req + 1
+    lock_no_of_req.release()
     return response
 
 @app.route('/api/v1/_count',methods=['GET'])
 def count_fun():
+    lock_no_of_req.acquire()
     global no_of_req
     global first_req
     if(first_req == 0):
@@ -238,10 +258,12 @@ def count_fun():
     headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = Response(resp.content, resp.status_code, headers)
     no_of_req = no_of_req + 1
+    lock_no_of_req.release()
     return response
 
 @app.route('/api/v1/_count',methods=['DELETE'])
 def del_count():
+    lock_no_of_req.acquire()
     global no_of_req
     global first_req
     if(first_req == 0):
@@ -260,10 +282,12 @@ def del_count():
     headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = Response(resp.content, resp.status_code, headers)
     no_of_req = no_of_req + 1
+    lock_no_of_req.release()
     return response
 
 @app.route('/api/v1/acts/count',methods=['GET'])
 def count1():
+    lock_no_of_req.acquire()
     global no_of_req
     global first_req
     if(first_req == 0):
@@ -282,6 +306,7 @@ def count1():
     headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = Response(resp.content, resp.status_code, headers)
     no_of_req = no_of_req + 1
+    lock_no_of_req.release()
     return response
 
 
@@ -290,5 +315,4 @@ if __name__ == '__main__':
     #t1 = threading.Thread(target = auto_scale)
     #t1.start()
     app.run("0.0.0.0",port=80)
-
 
