@@ -1,6 +1,6 @@
 import docker
 import time
-from threading import Thread
+from threading import Thread, currentThread, active_count
 from flask import Flask, redirect
 import requests
 
@@ -25,19 +25,18 @@ def restart_container(container):
     container.stop()
     container_list_pos = container_list.index(container)
     container_list.remove(container)
-    container_new = client.containers.run('acts:latest', detach=True, ports = {'80/tcp':ip})        
+    container_new = client.containers.run('spacevim/spacevim:latest', detach=True, ports = {'80/tcp':ip})        
     container_list.insert(container)
 
 def provision_containers(n):
     print("provisioning container ", n)
     global last_address
     for i in range(n):
-        print("last adress before the run call ", last_address)
 #        container_new = client.containers.run('acts:latest', detach=True, ports = {'80/tcp':last_address})        
-#        container_new = client.containers.run("spacevim/spacevim:latest", detach=True, ports = {'80/tcp': last_address})
+        container_new = client.containers.run("spacevim/spacevim:latest", detach=True, ports = {'80/tcp': last_address})
         print("provisioned container with ip ", last_address)
         last_address += 1
-#        container_list.append(container_new)
+        container_list.append(container_new)
 
 def delete_containers(n):
     print("deleting container ", n)
@@ -57,22 +56,21 @@ def load_balancer_handler():
 def fault_tolerance_handler():
     while(1):
         time.sleep(1)
-        for i in container_list:
-            ip = get_container_ip(container)        
-            r = requests.get('0.0.0.0:'+ip+"/api/v1/_health")
-            status_code = r.status_code()
-            if(status_code == 500):
-                restart_container(container)
+        for container in container_list:
+            ip = get_container_ip(container)
+            print('0.0.0.0:'+str(ip)+'/api/v1/_health')
+#            r = requests.get('0.0.0.0:'+str(ip)+"/api/v1/_health")
+#            status_code = r.status_code()
+#            if(status_code == 500):
+#                restart_container(container)
 
 def auto_scaling_handler():
     print("autoscaling_handler",int(no_of_requests_in_last_two_mins/20)+1)
     while(1):
-        print("auto scaling")
         bracket = int(no_of_requests_in_last_two_mins/20)+1 
         if(len(container_list) < bracket):
-#            provision_containers(bracket-len(container_list))
+            provision_containers(bracket-len(container_list))
 #            Thread(target = provision_containers, args=(bracket-len(container_list), )).start()
-            print("Hello")
         elif(len(container_list) > bracket):
             delete_containers(len(container_list)-bracket)
         else:
@@ -88,6 +86,7 @@ def redirect_to_other_containers():
 if __name__ == '__main__':
 #    Thread(target=app.run).start()
 #    Thread(target=useless).start()
-#    Thread(target=fault_tolerance_handler).start()
-    Thread(target=auto_scaling_handler).start()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    Thread(target=fault_tolerance_handler, daemon=True).start()
+    Thread(target=auto_scaling_handler, daemon=True).start()
+    app.run(host='0.0.0.0', port=5000)
+    print("Current Thread count: %i." % active_count())
