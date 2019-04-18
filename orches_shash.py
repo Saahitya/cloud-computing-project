@@ -373,7 +373,7 @@ def fault_tolerance():
                 cont_dict[active_cont[i]] = con_real
                 print("started a new container for "+active_cont[i],file=stderr)
                 cont_dict_lock.release()
-                sleep(60)
+        sleep(60)
 if __name__ == '__main__':
     init_container()
     t1 = threading.Thread(target = fault_tolerance)
