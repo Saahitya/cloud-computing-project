@@ -11,6 +11,7 @@ cont_dict = {}
 no_of_req = 0
 first_req = 0
 lock_no_of_req = threading.Lock()
+cont_dict_lock = threading.Lock()
 app = Flask(__name__)
 cur_cont = 0
 def auto_scale():
@@ -19,6 +20,7 @@ def auto_scale():
     while(1):
         time.sleep(30)
         lock_no_of_req.acquire()
+        cont_dict_lock.acquire()
         num_cont_needed = (no_of_req // 20) + 1
         if(len(cont_dict) != num_cont_needed):
             if(len(cont_dict) < num_cont_needed):
@@ -42,6 +44,7 @@ def auto_scale():
         else:
             print("Same number of containers",file=sys.stderr)
         no_of_req = 0
+        cont_dict_lock.release()
         lock_no_of_req.release()
 def init_container():
     con = os.popen("sudo docker run -p 8000:80 -d acts").read()
@@ -61,8 +64,11 @@ def fun():
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
     global cur_cont
+    #lock for cont_dict
+    cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
     new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
+    cont_dict_lock.release()
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -87,8 +93,10 @@ def cat_post():
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
     global cur_cont
+    cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
     new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
+    cont_dict_lock.release()
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -113,8 +121,10 @@ def rem_cat(categoryName):
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
     global cur_cont
+    cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
     new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
+    cont_dict_lock.release()
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -139,8 +149,10 @@ def list_acts_for_category(categoryName):
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
     global cur_cont
+    cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
     new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
+    cont_dict_lock.release()
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -165,8 +177,10 @@ def number_of_acts_for_category(categoryName):
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
     global cur_cont
+    cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
     new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
+    cont_dict_lock.release()
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -191,8 +205,10 @@ def upvote_an_act():
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
     global cur_cont
+    cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
     new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
+    cont_dict_lock.release()
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -217,8 +233,10 @@ def delete_act(task_id):
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
     global cur_cont
+    cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
     new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
+    cont_dict_lock.release()
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -243,8 +261,10 @@ def upload_an_act():
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
     global cur_cont
+    cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
     new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
+    cont_dict_lock.release()
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -269,8 +289,10 @@ def count_fun():
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
     global cur_cont
+    cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
     new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
+    cont_dict_lock.release()
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -295,8 +317,10 @@ def del_count():
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
     global cur_cont
+    cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
     new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
+    cont_dict_lock.release()
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -321,8 +345,10 @@ def count1():
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
     global cur_cont
+    cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
     new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
+    cont_dict_lock.release()
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -334,9 +360,22 @@ def count1():
     lock_no_of_req.release()
     return response
 
-
+def fault_tolerance():
+    while(1):
+        cont_dict_lock.acquire()
+        active_cont = list(cont_dict.keys())
+        for i in range(len(active_cont)):
+            req = requests.get("http://127.0.0.1:"+str(active_cont[i])+"/api/v1/_health")
+            if(req.status_code == 500):
+                del(cont_dict[active_cont[i]])
+                con = os.popen("sudo docker run -p " + str(active_cont[i]) + ":80 -d acts").read()
+                con_real = con.rstrip()
+                cont_dict[active_cont[i]] = con_real
+                print("started a new container for "+active_cont[i],file=stderr)
+                cont_dict_lock.release()
+                sleep(60)
 if __name__ == '__main__':
     init_container()
-    #t1 = threading.Thread(target = auto_scale)
-    #t1.start()
+    t1 = threading.Thread(target = fault_tolerance)
+    t1.start()
     app.run("0.0.0.0",port=80)
