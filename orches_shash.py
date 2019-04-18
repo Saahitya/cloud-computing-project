@@ -18,7 +18,7 @@ def auto_scale():
     global no_of_req
     print('Hello world!', file=sys.stderr)
     while(1):
-        time.sleep(30)
+        time.sleep(120)
         lock_no_of_req.acquire()
         cont_dict_lock.acquire()
         num_cont_needed = (no_of_req // 20) + 1
@@ -361,21 +361,25 @@ def count1():
     return response
 
 def fault_tolerance():
+    print("FAult tolereance started",file=sys.stderr)
     while(1):
+        print("Fault",file=sys.stderr)
+        time.sleep(60)
         cont_dict_lock.acquire()
         active_cont = list(cont_dict.keys())
         for i in range(len(active_cont)):
             req = requests.get("http://127.0.0.1:"+str(active_cont[i])+"/api/v1/_health")
             if(req.status_code == 500):
+                tmp = os.popen("sudo docker container kill " + cont_dict[active_cont[i]]).read()
                 del(cont_dict[active_cont[i]])
                 con = os.popen("sudo docker run -p " + str(active_cont[i]) + ":80 -d acts").read()
                 con_real = con.rstrip()
                 cont_dict[active_cont[i]] = con_real
                 print("started a new container for "+active_cont[i],file=stderr)
-                cont_dict_lock.release()
-        sleep(60)
+        cont_dict_lock.release()
+        #sleep(60)
 if __name__ == '__main__':
     init_container()
-    t1 = threading.Thread(target = fault_tolerance)
-    t1.start()
+    t2 = threading.Thread(target = fault_tolerance)
+    t2.start()
     app.run("0.0.0.0",port=80)
