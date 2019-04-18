@@ -375,7 +375,7 @@ def fault_tolerance():
                 con = os.popen("sudo docker run -p " + str(active_cont[i]) + ":80 -d acts").read()
                 con_real = con.rstrip()
                 cont_dict[active_cont[i]] = con_real
-                print("started a new container for "+active_cont[i],file=stderr)
+                print("started a new container for "+str(active_cont[i]),file=stderr)
         cont_dict_lock.release()
         #sleep(60)
 if __name__ == '__main__':
