@@ -12,11 +12,12 @@ no_of_req = 0
 first_req = 0
 lock_no_of_req = threading.Lock()
 app = Flask(__name__)
+cur_cont = 0
 def auto_scale():
     global no_of_req
     print('Hello world!', file=sys.stderr)
     while(1):
-        time.sleep(15)
+        time.sleep(120)
         lock_no_of_req.acquire()
         num_cont_needed = (no_of_req // 20) + 1
         if(len(cont_dict) != num_cont_needed):
@@ -59,7 +60,9 @@ def fun():
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    new_url = "http://127.0.0.1:8000"+parts[1]
+    global cur_cont
+    cur_cont = (cur_cont + 1) % len(cont_dict)
+    new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -83,7 +86,9 @@ def cat_post():
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    new_url = "http://127.0.0.1:8000"+parts[1]
+    global cur_cont
+    cur_cont = (cur_cont + 1) % len(cont_dict)
+    new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -107,7 +112,9 @@ def rem_cat(categoryName):
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    new_url = "http://127.0.0.1:8000"+parts[1]
+    global cur_cont
+    cur_cont = (cur_cont + 1) % len(cont_dict)
+    new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -131,7 +138,9 @@ def list_acts_for_category(categoryName):
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    new_url = "http://127.0.0.1:8000"+parts[1]
+    global cur_cont
+    cur_cont = (cur_cont + 1) % len(cont_dict)
+    new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -155,7 +164,9 @@ def number_of_acts_for_category(categoryName):
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    new_url = "http://127.0.0.1:8000"+parts[1]
+    global cur_cont
+    cur_cont = (cur_cont + 1) % len(cont_dict)
+    new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -179,7 +190,9 @@ def upvote_an_act():
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    new_url = "http://127.0.0.1:8000"+parts[1]
+    global cur_cont
+    cur_cont = (cur_cont + 1) % len(cont_dict)
+    new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -203,7 +216,9 @@ def delete_act(task_id):
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    new_url = "http://127.0.0.1:8000"+parts[1]
+    global cur_cont
+    cur_cont = (cur_cont + 1) % len(cont_dict)
+    new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -227,7 +242,9 @@ def upload_an_act():
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    new_url = "http://127.0.0.1:8000"+parts[1]
+    global cur_cont
+    cur_cont = (cur_cont + 1) % len(cont_dict)
+    new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -251,7 +268,9 @@ def count_fun():
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    new_url = "http://127.0.0.1:8000"+parts[1]
+    global cur_cont
+    cur_cont = (cur_cont + 1) % len(cont_dict)
+    new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -275,7 +294,9 @@ def del_count():
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    new_url = "http://127.0.0.1:8000"+parts[1]
+    global cur_cont
+    cur_cont = (cur_cont + 1) % len(cont_dict)
+    new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -299,7 +320,9 @@ def count1():
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    new_url = "http://127.0.0.1:8000"+parts[1]
+    global cur_cont
+    cur_cont = (cur_cont + 1) % len(cont_dict)
+    new_url = "http://127.0.0.1:"+str(cur_cont + 8000)+parts[1]
     resp = requests.request(
         method=request.method,
         url= new_url,
@@ -317,4 +340,3 @@ if __name__ == '__main__':
     #t1 = threading.Thread(target = auto_scale)
     #t1.start()
     app.run("0.0.0.0",port=80)
-
