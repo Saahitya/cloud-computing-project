@@ -58,8 +58,8 @@ def add_category():
     categories = pickle.load(db)
     db.close()
     db2 = open("no_of_acts_categories_dict.p","rb");
-    no_of_acts_categories_dict = pickle.load(db1);
-    db1.close()
+    no_of_acts_categories_dict = pickle.load(db2);
+    db2.close()
     #range_list = pickle.load( open("range_list.p", "rb"))
     #acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
     if(health_flag == 1):
@@ -251,7 +251,7 @@ def shutdown_server():
     if func is None:
         raise RuntimeError('Not running with the Werkzeug Server')
     #pickle.dump(categories, open("categories.p", "wb"))
-    pickle.dump(no_of_acts_categories_dict, open("no_of_acts_categories_dict.p", "wb"))
+    #pickle.dump(no_of_acts_categories_dict, open("no_of_acts_categories_dict.p", "wb"))
     pickle.dump(range_list, open("range_list.p", "wb"))
     pickle.dump(acts_list_categories_dict, open("acts_list_categories_dict.p", "wb"))
     func()
@@ -303,7 +303,7 @@ def crash_server():
     health_flag = 1
     return jsonify({}),200
 if __name__ == '__main__':
-    no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
+    #no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
     #categories = pickle.load(open("categories.p", "rb"))
     range_list = pickle.load( open("range_list.p", "rb"))
     acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
