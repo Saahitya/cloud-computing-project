@@ -60,6 +60,7 @@ def add_category():
     db2 = open("no_of_acts_categories_dict.p","rb");
     no_of_acts_categories_dict = pickle.load(db2);
     db2.close()
+    #
     #range_list = pickle.load( open("range_list.p", "rb"))
     #acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
     if(health_flag == 1):
