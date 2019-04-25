@@ -32,9 +32,9 @@ def after_request(response):
 @app.route('/api/v1/categories', methods=['GET'])
 def list_categories():
     #no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
-    db1 = open("no_of_acts_categories_dict.p","rb");
-    no_of_acts_categories_dict = pickle.load(db1);
-    db1.close()
+    db11 = open("no_of_acts_categories_dict.p","rb");
+    no_of_acts_categories_dict = pickle.load(db11);
+    db11.close()
     db = open("categories.p","rb");
     categories = pickle.load(db)
     db.close()
@@ -54,12 +54,12 @@ def list_categories():
 @app.route('/api/v1/categories', methods=['POST'])
 def add_category():
     #no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
-    db = open("categories.p","rb")
-    categories = pickle.load(db)
-    db.close()
-    db2 = open("no_of_acts_categories_dict.p","rb");
-    no_of_acts_categories_dict = pickle.load(db2);
-    db2.close()
+    db11 = open("categories.p","rb")
+    categories = pickle.load(db11)
+    db11.close()
+    db21 = open("no_of_acts_categories_dict.p","rb");
+    no_of_acts_categories_dict = pickle.load(db21);
+    db21.close()
     #
     #range_list = pickle.load( open("range_list.p", "rb"))
     #acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
@@ -74,12 +74,12 @@ def add_category():
         categories.add(category)
     else:
         abort(405)
-    db1 = open("categories.p","wb")
-    pickle.dump(categories,db1)
-    db1.close()
-    db4 = open("no_of_acts_categories_dict.p","wb")
-    pickle.dump(no_of_acts_categories_dict,db4)
-    db4.close()
+    db11 = open("categories.p","wb")
+    pickle.dump(categories,db11)
+    db11.close()
+    db42 = open("no_of_acts_categories_dict.p","wb")
+    pickle.dump(no_of_acts_categories_dict,db42)
+    db42.close()
     #pickle.dump(no_of_acts_categories_dict, open("no_of_acts_categories_dict.p", "wb"))
     #pickle.dump(range_list, open("range_list.p", "wb"))
     #pickle.dump(acts_list_categories_dict, open("acts_list_categories_dict.p", "wb"))

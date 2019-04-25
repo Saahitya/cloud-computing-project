@@ -27,7 +27,7 @@ def auto_scale():
                 max_cont_id = max(list(cont_dict.keys()))
                 extra_cont = num_cont_needed - len(cont_dict)
                 for i in range(extra_cont):
-                    con = os.popen("sudo docker run -v new1:/app_act -p " + str(max_cont_id + i + 1) + ":80 -d acts").read()
+                    con = os.popen("sudo docker run -v shashank:/app_act -p " + str(max_cont_id + i + 1) + ":80 -d acts").read()
                     con_real = con.rstrip()
                     cont_dict[max_cont_id + i + 1] = con_real
                     time.sleep(1)
@@ -48,7 +48,7 @@ def auto_scale():
         cont_dict_lock.release()
         lock_no_of_req.release()
 def init_container():
-    con = os.popen("sudo docker run -p 8000:80 -d acts").read()
+    con = os.popen("sudo docker run -v shashank:/app_act -p  8000:80 -d acts").read()
     con_real = con.rstrip()
     cont_dict[8000] = con_real
 #app = Flask(__name__)
