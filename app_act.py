@@ -32,6 +32,9 @@ def after_request(response):
 @app.route('/api/v1/categories', methods=['GET'])
 def list_categories():
     #no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
+    db1 = open("no_of_acts_categories_dict.p","rb");
+    no_of_acts_categories_dict = pickle.load(db1);
+    db1.close()
     db = open("categories.p","rb");
     categories = pickle.load(db)
     db.close()
@@ -54,6 +57,9 @@ def add_category():
     db = open("categories.p","rb")
     categories = pickle.load(db)
     db.close()
+    db2 = open("no_of_acts_categories_dict.p","rb");
+    no_of_acts_categories_dict = pickle.load(db1);
+    db1.close()
     #range_list = pickle.load( open("range_list.p", "rb"))
     #acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
     if(health_flag == 1):
@@ -70,6 +76,9 @@ def add_category():
     db1 = open("categories.p","wb")
     pickle.dump(categories,db1)
     db1.close()
+    db4 = open("no_of_acts_categories_dict.p","wb")
+    pickle.dump(no_of_acts_categories_dict,db4)
+    db4.close()
     #pickle.dump(no_of_acts_categories_dict, open("no_of_acts_categories_dict.p", "wb"))
     #pickle.dump(range_list, open("range_list.p", "wb"))
     #pickle.dump(acts_list_categories_dict, open("acts_list_categories_dict.p", "wb"))
