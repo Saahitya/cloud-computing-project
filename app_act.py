@@ -88,6 +88,15 @@ def add_category():
 # 5_final  [Remove a category]
 @app.route('/api/v1/categories/<string:categoryName>', methods=['DELETE'])
 def remove_category(categoryName):
+    db11 = open("categories.p","rb")
+    categories = pickle.load(db11)
+    db11.close()
+    db21 = open("no_of_acts_categories_dict.p","rb");
+    no_of_acts_categories_dict = pickle.load(db21);
+    db21.close()
+    db33 = open("acts_list_categories_dict.p","rb");
+    acts_list_categories_dict = pickle.load(db33);
+    db33.close()
     if(health_flag == 1):
         return jsonify({}),500
     global app_count
@@ -96,6 +105,15 @@ def remove_category(categoryName):
         no_of_acts_categories_dict.pop(categoryName)
         acts_list_categories_dict.pop(categoryName)
         categories.remove(categoryName)
+        db11 = open("categories.p","wb")
+        pickle.dump(categories,db11)
+        db11.close()
+        db42 = open("no_of_acts_categories_dict.p","wb")
+        pickle.dump(no_of_acts_categories_dict,db42)
+        db42.close()
+        db33 = open("acts_list_categories_dict.p","wb");
+        pickle.dump(acts_list_categories_dict,db33);
+        db33.close()
         return jsonify({}), 200
     else:
         abort(405)
