@@ -27,7 +27,7 @@ def auto_scale():
                 max_cont_id = max(list(cont_dict.keys()))
                 extra_cont = num_cont_needed - len(cont_dict)
                 for i in range(extra_cont):
-                    con = os.popen("sudo docker run -p " + str(max_cont_id + i + 1) + ":80 -d acts").read()
+                    con = os.popen("sudo docker run -v new1:/app_act -p " + str(max_cont_id + i + 1) + ":80 -d acts").read()
                     con_real = con.rstrip()
                     cont_dict[max_cont_id + i + 1] = con_real
                     time.sleep(1)
@@ -64,6 +64,7 @@ def fun():
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
+    print(parts, file=sys.stderr)
     global cur_cont
     #lock for cont_dict
     cont_dict_lock.acquire()
