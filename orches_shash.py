@@ -16,9 +16,9 @@ app = Flask(__name__)
 cur_cont = 0
 def auto_scale():
     global no_of_req
-    print('Hello world!', file=sys.stderr)
+    print('Auto Scaling Started', file=sys.stderr)
     while(1):
-        time.sleep(120)
+        time.sleep(45)
         lock_no_of_req.acquire()
         cont_dict_lock.acquire()
         num_cont_needed = (no_of_req // 20) + 1
@@ -30,6 +30,7 @@ def auto_scale():
                     con = os.popen("sudo docker run -p " + str(max_cont_id + i + 1) + ":80 -d acts").read()
                     con_real = con.rstrip()
                     cont_dict[max_cont_id + i + 1] = con_real
+                    time.sleep(1)
                 print(cont_dict,file=sys.stderr)
             else:
                 max_cont_id = max(list(cont_dict.keys()))
@@ -361,10 +362,10 @@ def count1():
     return response
 
 def fault_tolerance():
-    print("FAult tolereance started",file=sys.stderr)
+    print("Fault tolereance started",file=sys.stderr)
     while(1):
-        print("Fault",file=sys.stderr)
-        time.sleep(60)
+        print("Fault check",file=sys.stderr)
+        time.sleep(1)
         cont_dict_lock.acquire()
         active_cont = list(cont_dict.keys())
         for i in range(len(active_cont)):
