@@ -325,5 +325,5 @@ if __name__ == '__main__':
     #no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
     #categories = pickle.load(open("categories.p", "rb"))
     range_list = pickle.load( open("range_list.p", "rb"))
-    acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
+    #acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
     app.run("0.0.0.0",port=80)
