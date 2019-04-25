@@ -61,12 +61,12 @@ def add_category():
         no_of_acts_categories_dict[category] = 0
         acts_list_categories_dict[category] = []
         categories.add(category)
-        pickle.dump(categories, open("categories.p", "wb"))
-        pickle.dump(no_of_acts_categories_dict, open("no_of_acts_categories_dict.p", "wb"))
-        pickle.dump(range_list, open("range_list.p", "wb"))
-        pickle.dump(acts_list_categories_dict, open("acts_list_categories_dict.p", "wb"))
     else:
         abort(405)
+    pickle.dump(categories, open("categories.p", "wb"))
+    pickle.dump(no_of_acts_categories_dict, open("no_of_acts_categories_dict.p", "wb"))
+    pickle.dump(range_list, open("range_list.p", "wb"))
+    pickle.dump(acts_list_categories_dict, open("acts_list_categories_dict.p", "wb"))
     return jsonify({}), 201
 
 # 5_final  [Remove a category]
