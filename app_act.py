@@ -31,6 +31,10 @@ def after_request(response):
 # 3_final [List all categories]
 @app.route('/api/v1/categories', methods=['GET'])
 def list_categories():
+    no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
+    categories = pickle.load(open("categories.p", "rb"))
+    range_list = pickle.load( open("range_list.p", "rb"))
+    acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
     if(health_flag == 1):
         return jsonify({}),500
     global app_count
@@ -44,6 +48,10 @@ def list_categories():
 # 4_final  [Add a category]
 @app.route('/api/v1/categories', methods=['POST'])
 def add_category():
+    no_of_acts_categories_dict = pickle.load(open("no_of_acts_categories_dict.p", "rb"))
+    categories = pickle.load(open("categories.p", "rb"))
+    range_list = pickle.load( open("range_list.p", "rb"))
+    acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
     if(health_flag == 1):
         return jsonify({}),500
     global app_count
@@ -53,6 +61,10 @@ def add_category():
         no_of_acts_categories_dict[category] = 0
         acts_list_categories_dict[category] = []
         categories.add(category)
+        pickle.dump(categories, open("categories.p", "wb"))
+        pickle.dump(no_of_acts_categories_dict, open("no_of_acts_categories_dict.p", "wb"))
+        pickle.dump(range_list, open("range_list.p", "wb"))
+        pickle.dump(acts_list_categories_dict, open("acts_list_categories_dict.p", "wb"))
     else:
         abort(405)
     return jsonify({}), 201
