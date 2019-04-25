@@ -60,6 +60,9 @@ def add_category():
     db21 = open("no_of_acts_categories_dict.p","rb");
     no_of_acts_categories_dict = pickle.load(db21);
     db21.close()
+    db33 = open("acts_list_categories_dict.p","rb");
+    acts_list_categories_dict = pickle.load(db33);
+    db33.close()
     #
     #range_list = pickle.load( open("range_list.p", "rb"))
     #acts_list_categories_dict = pickle.load(open("acts_list_categories_dict.p", "rb"))
@@ -80,6 +83,9 @@ def add_category():
     db42 = open("no_of_acts_categories_dict.p","wb")
     pickle.dump(no_of_acts_categories_dict,db42)
     db42.close()
+    db33 = open("acts_list_categories_dict.p","wb");
+    pickle.dump(acts_list_categories_dict,db33);
+    db33.close()
     #pickle.dump(no_of_acts_categories_dict, open("no_of_acts_categories_dict.p", "wb"))
     #pickle.dump(range_list, open("range_list.p", "wb"))
     #pickle.dump(acts_list_categories_dict, open("acts_list_categories_dict.p", "wb"))
