@@ -292,7 +292,7 @@ def upload_an_act():
         abort(400)
     flag = 0
     # assuming the other user container is linked to 0.0.0.0:5000
-    req = requests.get("http://54.86.75.218:8000/api/v1/users",headers={"Origin":"35.171.62.224"})
+    req = requests.get("http://54.86.75.218:80/api/v1/users",headers={"Origin":"35.171.62.224"})
     usernames = req.json()
     for i in usernames:
         if i == request.json["username"]:

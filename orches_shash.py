@@ -18,7 +18,7 @@ def auto_scale():
     global no_of_req
     print('Auto Scaling Started', file=sys.stderr)
     while(1):
-        time.sleep(45)
+        time.sleep(120)
         lock_no_of_req.acquire()
         cont_dict_lock.acquire()
         num_cont_needed = (no_of_req // 20) + 1
