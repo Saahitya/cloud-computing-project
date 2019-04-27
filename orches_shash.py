@@ -64,7 +64,8 @@ def fun():
       t1.start()
     old_url = request.url
     parts = old_url.split("http://35.171.62.224")
-    print(parts, file=sys.stderr)
+    print(old_url)
+    #print(parts, file=sys.stderr)
     global cur_cont
     #lock for cont_dict
     cont_dict_lock.acquire()
