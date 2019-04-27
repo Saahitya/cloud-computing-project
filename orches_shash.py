@@ -63,7 +63,7 @@ def fun():
       t1 = threading.Thread(target=auto_scale)
       t1.start()
     old_url = request.url
-    parts = old_url.split("http://35.171.62.224")
+    parts = old_url.split("http://localhost")
     print(old_url)
     #print(parts, file=sys.stderr)
     global cur_cont
@@ -94,7 +94,7 @@ def cat_post():
       t1 = threading.Thread(target=auto_scale)
       t1.start()
     old_url = request.url
-    parts = old_url.split("http://35.171.62.224")
+    parts = old_url.split("http://localhost")
     global cur_cont
     cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
@@ -122,7 +122,7 @@ def rem_cat(categoryName):
       t1 = threading.Thread(target=auto_scale)
       t1.start()
     old_url = request.url
-    parts = old_url.split("http://35.171.62.224")
+    parts = old_url.split("http://localhost")
     global cur_cont
     cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
@@ -150,7 +150,7 @@ def list_acts_for_category(categoryName):
       t1 = threading.Thread(target=auto_scale)
       t1.start()
     old_url = request.url
-    parts = old_url.split("http://35.171.62.224")
+    parts = old_url.split("http://localhost")
     global cur_cont
     cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
@@ -178,7 +178,7 @@ def number_of_acts_for_category(categoryName):
       t1 = threading.Thread(target=auto_scale)
       t1.start()
     old_url = request.url
-    parts = old_url.split("http://35.171.62.224")
+    parts = old_url.split("http://localhost")
     global cur_cont
     cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
@@ -206,7 +206,7 @@ def upvote_an_act():
       t1 = threading.Thread(target=auto_scale)
       t1.start()
     old_url = request.url
-    parts = old_url.split("http://35.171.62.224")
+    parts = old_url.split("http://localhost")
     global cur_cont
     cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
@@ -234,7 +234,7 @@ def delete_act(task_id):
       t1 = threading.Thread(target=auto_scale)
       t1.start()
     old_url = request.url
-    parts = old_url.split("http://35.171.62.224")
+    parts = old_url.split("http://localhost")
     global cur_cont
     cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
@@ -262,7 +262,7 @@ def upload_an_act():
       t1 = threading.Thread(target=auto_scale)
       t1.start()
     old_url = request.url
-    parts = old_url.split("http://35.171.62.224")
+    parts = old_url.split("http://localhost")
     global cur_cont
     cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
@@ -290,7 +290,7 @@ def count_fun():
       t1 = threading.Thread(target=auto_scale)
       t1.start()
     old_url = request.url
-    parts = old_url.split("http://35.171.62.224")
+    parts = old_url.split("http://localhost")
     global cur_cont
     cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
@@ -318,7 +318,7 @@ def del_count():
       t1 = threading.Thread(target=auto_scale)
       t1.start()
     old_url = request.url
-    parts = old_url.split("http://35.171.62.224")
+    parts = old_url.split("http://localhost")
     global cur_cont
     cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
@@ -346,7 +346,7 @@ def count1():
       t1 = threading.Thread(target=auto_scale)
       t1.start()
     old_url = request.url
-    parts = old_url.split("http://35.171.62.224")
+    parts = old_url.split("http://localhost")
     global cur_cont
     cont_dict_lock.acquire()
     cur_cont = (cur_cont + 1) % len(cont_dict)
