@@ -127,6 +127,15 @@ def remove_category(categoryName):
 # 6_final  [List acts for a given category]
 @app.route('/api/v1/categories/<string:categoryName>/acts', methods=['GET'])
 def list_acts_for_category(categoryName):
+    db11 = open("categories.p","rb")
+    categories = pickle.load(db11)
+    db11.close()
+    db21 = open("no_of_acts_categories_dict.p","rb");
+    no_of_acts_categories_dict = pickle.load(db21);
+    db21.close()
+    db33 = open("acts_list_categories_dict.p","rb");
+    acts_list_categories_dict = pickle.load(db33);
+    db33.close()
     if(health_flag == 1):
         return jsonify({}),500
     global app_count
@@ -165,6 +174,15 @@ def list_acts_for_category(categoryName):
 # 7_final [Number of acts in a category]
 @app.route('/api/v1/categories/<string:categoryName>/acts/size', methods=['GET'])
 def number_of_acts_for_category(categoryName):
+    db11 = open("categories.p","rb")
+    categories = pickle.load(db11)
+    db11.close()
+    db21 = open("no_of_acts_categories_dict.p","rb");
+    no_of_acts_categories_dict = pickle.load(db21);
+    db21.close()
+    db33 = open("acts_list_categories_dict.p","rb");
+    acts_list_categories_dict = pickle.load(db33);
+    db33.close()
     if(health_flag == 1):
         return jsonify({}),500
     global app_count
@@ -179,6 +197,15 @@ def number_of_acts_for_category(categoryName):
 # 9_final [Upvote an act]
 @app.route('/api/v1/acts/upvote', methods=['POST'])
 def upvote_an_act():
+    db11 = open("categories.p","rb")
+    categories = pickle.load(db11)
+    db11.close()
+    db21 = open("no_of_acts_categories_dict.p","rb");
+    no_of_acts_categories_dict = pickle.load(db21);
+    db21.close()
+    db33 = open("acts_list_categories_dict.p","rb");
+    acts_list_categories_dict = pickle.load(db33);
+    db33.close()
     if(health_flag == 1):
         return jsonify({}),500
     global app_count
@@ -187,11 +214,29 @@ def upvote_an_act():
         for j in i:
             if j["actId"]==request.json[0]:
                 j["upvotes"] = j["upvotes"]+1
+                db11 = open("categories.p","wb")
+                pickle.dump(categories,db11)
+                db11.close()
+                db42 = open("no_of_acts_categories_dict.p","wb")
+                pickle.dump(no_of_acts_categories_dict,db42)
+                db42.close()
+                db33 = open("acts_list_categories_dict.p","wb");
+                pickle.dump(acts_list_categories_dict,db33);
+                db33.close()
                 return jsonify({}), 200
     abort(405)
 # 10_final [Remove an act]
 @app.route('/api/v1/acts/<int:task_id>',methods = ['DELETE'])
 def delete_act(task_id):
+    db11 = open("categories.p","rb")
+    categories = pickle.load(db11)
+    db11.close()
+    db21 = open("no_of_acts_categories_dict.p","rb");
+    no_of_acts_categories_dict = pickle.load(db21);
+    db21.close()
+    db33 = open("acts_list_categories_dict.p","rb");
+    acts_list_categories_dict = pickle.load(db33);
+    db33.close()
     if(health_flag == 1):
         return jsonify({}),500
     global app_count
@@ -209,11 +254,29 @@ def delete_act(task_id):
             if(act_list[j]["actId"] == task_id):
                 del(act_list[j])
                 no_of_acts_categories_dict[i] = no_of_acts_categories_dict[i] - 1
+                db11 = open("categories.p","wb")
+                pickle.dump(categories,db11)
+                db11.close()
+                db42 = open("no_of_acts_categories_dict.p","wb")
+                pickle.dump(no_of_acts_categories_dict,db42)
+                db42.close()
+                db33 = open("acts_list_categories_dict.p","wb");
+                pickle.dump(acts_list_categories_dict,db33);
+                db33.close()
                 return jsonify({}),200
     abort(405)
 
 @app.route('/api/v1/acts', methods=['POST'])
 def upload_an_act():
+    db11 = open("categories.p","rb")
+    categories = pickle.load(db11)
+    db11.close()
+    db21 = open("no_of_acts_categories_dict.p","rb");
+    no_of_acts_categories_dict = pickle.load(db21);
+    db21.close()
+    db33 = open("acts_list_categories_dict.p","rb");
+    acts_list_categories_dict = pickle.load(db33);
+    db33.close()
     if(health_flag == 1):
         return jsonify({}),500
     global app_count
@@ -269,6 +332,15 @@ def upload_an_act():
     d["imgB64"] = request.json["imgB64"]
     d["username"] = request.json["username"]
     acts_list_categories_dict[request.json["categoryName"]].append(d)
+    db11 = open("categories.p","wb")
+    pickle.dump(categories,db11)
+    db11.close()
+    db42 = open("no_of_acts_categories_dict.p","wb")
+    pickle.dump(no_of_acts_categories_dict,db42)
+    db42.close()
+    db33 = open("acts_list_categories_dict.p","wb");
+    pickle.dump(acts_list_categories_dict,db33);
+    db33.close()
     return jsonify({}), 201
 
 def shutdown_server():
@@ -304,6 +376,15 @@ def del_count():
 
 @app.route('/api/v1/acts/count',methods=['GET'])
 def count1():
+    db11 = open("categories.p","rb")
+    categories = pickle.load(db11)
+    db11.close()
+    db21 = open("no_of_acts_categories_dict.p","rb");
+    no_of_acts_categories_dict = pickle.load(db21);
+    db21.close()
+    db33 = open("acts_list_categories_dict.p","rb");
+    acts_list_categories_dict = pickle.load(db33);
+    db33.close()
     if(health_flag == 1):
         return jsonify({}),500
     global app_count
