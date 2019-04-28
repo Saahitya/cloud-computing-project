@@ -185,11 +185,15 @@ def generic_orchestrator_configuration():
                 scaling_check_interval = int(configurations["scaling_check_interval"])
             if("scaling_container_bracket" in configurations.keys()):
                 scaling_container_bracket = int(configurations["scaling_container_bracket"])
-            if(fault_tolerance_check_interval in configurations.keys()):
+            if("fault_tolerance_check_interval" in configurations.keys()):
                 fault_tolerance_check_interval = int(configurations["fault_tolerance_check_interval"])
 
 if __name__ == '__main__':
     generic_orchestrator_configuration()
+    print("first_container_ip", first_container_ip)
+    print("scaling_check_interval", scaling_check_interval)
+    print("scaling_container_bracket", scaling_container_bracket)
+    print("fault_tolerance_check_interval", fault_tolerance_check_interval)
     init_container()
     Thread(target = fault_tolerance).start()
     app.run("0.0.0.0",port=80)
