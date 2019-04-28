@@ -15,9 +15,9 @@ container_dictionary_lock = Lock()
 app = Flask(__name__)
 current_container = 0
 
-def start_last_container(i):
+def start_last_container():
     max_cont_id = max(list(container_dictionary.keys()))
-    container_id = os.popen("sudo docker run -v saksham:/app_act -p " + str(max_cont_id + i + 1) + ":80 -d acts").read().rstrip()
+    container_id = os.popen("sudo docker run -v saksham:/app_act -p " + str(max_cont_id + 1) + ":80 -d acts").read().rstrip()
     container_dictionary[max_cont_id + 1] = container_id
 
 def kill_last_container():
@@ -39,7 +39,7 @@ def auto_scale():
             if(len(container_dictionary) < num_cont_needed):
                 no_of_extra_containers = num_cont_needed - len(container_dictionary)
                 for i in range(no_of_extra_containers):
-                    start_last_container(i)
+                    start_last_container()
                     time.sleep(1)
                 print(container_dictionary,file=sys.stderr)
             else:
@@ -59,7 +59,7 @@ def load_balancer_handler(url):
     global number_of_requests, first_request
     if(first_request == False):
       first_request = True
-      number_of_requests += 1
+      # number_of_requests += 1
       t1 = Thread(target=auto_scale)
       t1.start()
     if("localhost" in url):
@@ -79,9 +79,9 @@ def load_balancer_handler(url):
         url= new_url,
         headers={key: value for (key, value) in request.headers if key != 'Host'},
         data=request.get_data())
-    headers = [(name, value) for (name, value) in resp.raw.headers.items()]
+    headers = [(name, value) for (name, value) in resp.raw.headers.items()]#refer back
     response = Response(resp.content, resp.status_code, headers)
-    number_of_requests = number_of_requests + 1
+    number_of_requests = number_of_requests + 1 #repeated after
     lock_number_of_requests.release()
     return response
 
@@ -98,7 +98,7 @@ def fault_tolerance():
             if(request_.status_code == 500):
                 os.popen("sudo docker container kill " + container_dictionary[container_ip]).read()
                 del(container_dictionary[container_ip])
-                container_id = os.popen("sudo docker run -p " + str(container_ip) + ":80 -d acts").read().rstrip()
+                container_id = os.popen("sudo docker run -v saksham:/app_act -p " + str(container_ip) + ":80 -d acts").read().rstrip()
                 container_dictionary[container_ip] = container_id
                 print("started a new container for "+str(container_ip),file=sys.stderr)
 
