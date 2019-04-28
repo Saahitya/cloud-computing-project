@@ -15,7 +15,7 @@ container_dictionary_lock = Lock()
 app = Flask(__name__)
 current_container = 0
 
-def start_last_container():
+def start_last_container(i):
     max_cont_id = max(list(container_dictionary.keys()))
     container_id = os.popen("sudo docker run -v saksham:/app_act -p " + str(max_cont_id + i + 1) + ":80 -d acts").read().rstrip()
     container_dictionary[max_cont_id + 1] = container_id
@@ -39,7 +39,7 @@ def auto_scale():
             if(len(container_dictionary) < num_cont_needed):
                 no_of_extra_containers = num_cont_needed - len(container_dictionary)
                 for i in range(no_of_extra_containers):
-                    start_last_container()
+                    start_last_container(i)
                     time.sleep(1)
                 print(container_dictionary,file=sys.stderr)
             else:
@@ -85,7 +85,7 @@ def fault_tolerance():
         print("Fault check",file=sys.stderr)
         time.sleep(1)
         container_dictionary_lock.acquire()
-        
+
         active_containers = list(container_dictionary.keys())
         for container_ip in active_containers:
             request_ = requests.get("http://127.0.0.1:"+str(container_ip)+"/api/v1/_health")
@@ -95,7 +95,7 @@ def fault_tolerance():
                 container_id = os.popen("sudo docker run -p " + str(container_ip) + ":80 -d acts").read().rstrip()
                 container_dictionary[container_ip] = container_id
                 print("started a new container for "+str(container_ip),file=sys.stderr)
-        
+
         container_dictionary_lock.release()
 
 
