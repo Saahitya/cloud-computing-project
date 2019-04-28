@@ -6,6 +6,7 @@ import pickle
 from threading import Thread, Lock
 import sys
 import time
+import json
 
 container_dictionary = {}
 number_of_requests = 0
@@ -14,6 +15,11 @@ lock_number_of_requests = Lock()
 container_dictionary_lock = Lock()
 app = Flask(__name__)
 current_container = 0
+
+first_container_ip = 8000
+scaling_check_interval = 120
+scaling_container_bracket = 20
+fault_tolerance_check_interval = 1
 
 def start_last_container():
     max_cont_id = max(list(container_dictionary.keys()))
@@ -31,10 +37,10 @@ def auto_scale():
     global number_of_requests
     print('Auto Scaling Started', file=sys.stderr)
     while(1):
-        time.sleep(120)
+        time.sleep(scaling_check_interval)
         lock_number_of_requests.acquire()
         container_dictionary_lock.acquire()
-        num_cont_needed = (number_of_requests // 20) + 1
+        num_cont_needed = (number_of_requests // scaling_container_bracket) + 1
         if(len(container_dictionary) != num_cont_needed):
             if(len(container_dictionary) < num_cont_needed):
                 no_of_extra_containers = num_cont_needed - len(container_dictionary)
@@ -72,7 +78,7 @@ def load_balancer_handler(url):
     global current_container
     container_dictionary_lock.acquire()
     current_container = (current_container + 1) % len(container_dictionary)
-    new_url = "http://127.0.0.1:"+str(current_container + 8000)+parts[1]
+    new_url = "http://127.0.0.1:"+str(current_container + first_container_ip)+parts[1]
     container_dictionary_lock.release()
     resp = requests.request(
         method=request.method,
@@ -89,7 +95,7 @@ def fault_tolerance():
     print("Fault tolereance started",file=sys.stderr)
     while(1):
         print("Fault check",file=sys.stderr)
-        time.sleep(1)
+        time.sleep(fault_tolerance_check_interval)
         container_dictionary_lock.acquire()
 
         active_containers = list(container_dictionary.keys())
@@ -106,9 +112,9 @@ def fault_tolerance():
 
 
 def init_container():
-    con = os.popen("sudo docker run -v saksham:/app_act -p  8000:80 -d acts").read()
+    con = os.popen("sudo docker run -v saksham:/app_act -p  "+str(first_container_ip)+":80 -d acts").read()
     con_real = con.rstrip()
-    container_dictionary[8000] = con_real
+    container_dictionary[first_container_ip] = con_real
 
 @app.route('/api/v1/categories', methods=['GET'])
 def fun():
@@ -165,7 +171,25 @@ def count1():
     response = load_balancer_handler(request.url)
     return response
 
+def generic_orchestrator_configuration():
+    global first_container_ip
+    global scaling_check_interval
+    global scaling_container_bracket
+    global fault_tolerance_check_interval
+    if(os.path.isfile("orch_config.txt")):
+        with open("orch_config.txt") as json_file:
+            configurations = json.load(json_file)
+            if("first_container_ip" in configurations.keys()):
+                first_container_ip = int(configurations["first_container_ip"])
+            if("scaling_check_interval" in configurations.keys()):
+                scaling_check_interval = int(configurations["scaling_check_interval"])
+            if("scaling_container_bracket" in configurations.keys()):
+                scaling_container_bracket = int(configurations["scaling_container_bracket"])
+            if(fault_tolerance_check_interval in configurations.keys()):
+                fault_tolerance_check_interval = int(configurations["fault_tolerance_check_interval"])
+
 if __name__ == '__main__':
+    generic_orchestrator_configuration()
     init_container()
     Thread(target = fault_tolerance).start()
     app.run("0.0.0.0",port=80)
