@@ -64,8 +64,11 @@ def load_balancer_handler(url):
       t1.start()
     if("localhost" in url):
       parts = url.split("http://localhost")
-    else:
+      #lb1-2139422882.us-east-1.elb.amazonaws.com
+    else if("35.171.62.224" in url):
       parts = url.split("http://35.171.62.224")
+    else:
+      parts = url.split("http://lb1-2139422882.us-east-1.elb.amazonaws.com")
     global current_container
     container_dictionary_lock.acquire()
     current_container = (current_container + 1) % len(container_dictionary)
