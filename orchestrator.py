@@ -65,7 +65,7 @@ def load_balancer_handler(url):
     if("localhost" in url):
       parts = url.split("http://localhost")
       #lb1-2139422882.us-east-1.elb.amazonaws.com
-    else if("35.171.62.224" in url):
+    elif("35.171.62.224" in url):
       parts = url.split("http://35.171.62.224")
     else:
       parts = url.split("http://lb1-2139422882.us-east-1.elb.amazonaws.com")
