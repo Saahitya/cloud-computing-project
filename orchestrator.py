@@ -62,7 +62,10 @@ def load_balancer_handler(url):
       number_of_requests += 1
       t1 = Thread(target=auto_scale)
       t1.start()
-    parts = url.split("http://localhost")
+    if("localhost" in url):
+      parts = url.split("http://localhost")
+    else:
+      parts = url.split("http://35.171.62.224")
     global current_container
     container_dictionary_lock.acquire()
     current_container = (current_container + 1) % len(container_dictionary)
